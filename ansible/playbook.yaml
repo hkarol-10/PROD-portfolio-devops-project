@@ -1,0 +1,35 @@
+- name: Deploy all hosts
+  hosts: portfolio_vm,elk_vm
+  become: yes
+  roles:
+    - bootstrap
+  tasks:
+    - name: Run nodejs on portfolio_vm
+      import_role:
+        name: nodejs
+      when: inventory_hostname == "portfolio_vm"
+
+    - name: Run nginx on all
+      import_role:
+        name: nginx
+
+    - name: Run filebeat on all
+      import_role:
+        name: filebeat
+
+    - name: Run metricbeat on all
+      import_role:
+        name: metricbeat
+
+    - name: Run elk on elk_vm
+      import_role:
+        name: elk
+      when: inventory_hostname == "elk_vm"
+
+    - name: Run docker on all
+      import_role:
+        name: docker
+
+    - name: Run logrotate on all
+      import_role:
+        name: logrotate

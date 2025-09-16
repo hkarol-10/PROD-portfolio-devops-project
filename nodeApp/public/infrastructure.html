@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>K.H DevOps portfolio page</title>
+
+  <!-- Favicon (ikona zakładki) -->
+  <link rel="icon" href="images/favicon.png" type="image/png">
+
+  <!-- Wstępne ustawienie trybu, aby uniknąć migotania -->
+  <script>
+    (function() {
+      try {
+        const theme = localStorage.getItem("theme") || "dark";
+        document.documentElement.classList.add(theme);
+      } catch(e) {
+        console.error(e);
+      }
+    })();
+  </script>
+
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="header"></div>
+
+  <main>
+    <section class="infrastructure-section">
+      <h1 id="infrastructureHeader" class="page-title" data-i18n="infrastructure">Infrastructure</h1>
+      <p id="infrastructureDesc" data-i18n="infrastructureDescription">
+        Here you will find a detailed overview of the infrastructure used to build this site, 
+        including tools and technologies applied during its development. 
+      </p>
+      <p id="infrastructureRepo" data-i18n="infrastructureRepo">
+        You can also check out the source code in the open repository: 
+      </p>
+      <a href="https://github.com/hkarol-10/PROD-portfolio-devops-project/tree/main" target="_blank" rel="noopener noreferrer">
+          GitHub Repository
+        </a>
+      <div id="securityNotice" class="security-notice">
+        ⚠️ <strong id="securityNoticeTitle">Security Notice:</strong>
+        <span id="securityNoticeText" data-i18n="securityNoticeText">
+          This project is publissscssly visible for demonstration and inspiration purposes.
+          No real credentials, private keys, or sensitive infrastructure details are included.
+          All access requires proper secrets and environment variables configured in CI/CD.
+        </span>
+      </div>
+      <div class="diagram-container">
+        <img src="images/infra_picture.png" alt="Infrastructure diagram">
+      </div>
+    </section>
+  </main>
+
+  <div id="footer"></div>
+  <script src="js/main.js"></script>
+</body>
+</html>

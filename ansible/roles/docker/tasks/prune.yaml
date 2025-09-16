@@ -1,0 +1,5 @@
+---
+- name: Prune old images
+  shell: docker system prune -a -f
+  args:
+    chdir: "{{ docker_home }}"

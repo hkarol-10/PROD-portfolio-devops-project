@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>K.H DevOps portfolio page</title>
+
+  <!-- Favicon (ikona zakładki) -->
+  <link rel="icon" href="images/favicon.png" type="image/png">
+
+  <!-- Wstępne ustawienie trybu, aby uniknąć migotania -->
+  <script>
+    (function() {
+      try {
+        const theme = localStorage.getItem("theme") || "dark";
+        document.documentElement.classList.add(theme);
+      } catch(e) {
+        console.error(e);
+      }
+    })();
+  </script>
+
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+  <div id="header"></div>
+  <main>
+    <h1 id="title">Welcome to my page!</h1>
+    <br>
+    <p id="description">Here you will find information about me, my experience, and skills.</p>
+    <br>
+    <p id="aboutText">
+      Experienced DevOps engineer with over 3 years of hands-on experience in automating CI/CD processes, deploying applications, and maintaining production environments.
+      I have a comprehensive understanding of the software development lifecycle (SDLC), gained through work on projects using Agile/Scrum methodologies.
+      I have practical experience with CI/CD tools such as Jenkins, Azure DevOps and cloud environment Azure & Openshift, which allows me to efficiently automate deployment processes,
+      improve development team productivity, and ensure system stability. I quickly learn new technologies and tools, enabling me to adapt effectively to evolving project requirements.
+    </p>
+
+    <!-- DevOps Logo -->
+    <div class="devops-logo">
+      <img src="images/devops.png" alt="DevOps Logo">
+    </div>
+    
+  </main>
+  <div id="footer"></div>
+  <script src="js/main.js"></script>
+</body>
+</html>

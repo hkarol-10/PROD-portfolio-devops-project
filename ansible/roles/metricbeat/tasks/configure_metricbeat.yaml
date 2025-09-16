@@ -1,0 +1,7 @@
+---
+- name: Deploy metricbeat config file
+  template:
+    src: metricbeat.yaml.j2
+    dest: "{{ metricbeat_config_file }}"
+    owner: root # metricbeat requires root in the container
+    mode: '0755'

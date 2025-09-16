@@ -1,0 +1,12 @@
+---
+# Entry point for the metricbeat
+
+
+# 1. Stop mericbeat service
+- import_tasks: stop_metricbeat.yaml
+
+# 2. Deploy metricbeat files
+- import_tasks: configure_metricbeat.yaml
+
+# 3. Start mericbeat service if not running
+- import_tasks: start_metricbeat.yaml

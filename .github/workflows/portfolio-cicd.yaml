@@ -1,0 +1,59 @@
+name: Portfolio Ansible Deploy
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: portfolio-deploy
+  cancel-in-progress: false
+
+jobs:
+  ansible:
+    name: Ansible Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.PORTFOLIO_VM_KEY_CI }}" > ~/.ssh/ansible
+          chmod 600 ~/.ssh/ansible
+
+      - name: Add VM to known_hosts
+        run: |
+          ssh-keyscan -p ${{ secrets.ANSIBLE_PORT_SSH }} -H ${{ secrets.PORTFOLIO_VM_IP }} >> ~/.ssh/known_hosts
+          ssh-keyscan -p ${{ secrets.ANSIBLE_PORT_SSH }} -H ${{ secrets.ELK_VM_IP }} >> ~/.ssh/known_hosts
+
+      - name: Install Ansible
+        run: sudo apt-get update && sudo apt-get install -y ansible
+
+      - name: Run Ansible Playbook
+        run: |
+          ansible-playbook -i ansible/inventory.yaml ansible/playbook.yaml \
+           --vault-password-file=<(echo "$ANSIBLE_VAULT_PASSWORD")
+        env:
+          PORTFOLIO_VM_IP:            ${{ secrets.PORTFOLIO_VM_IP }}
+          ELK_VM_IP:                  ${{ secrets.ELK_VM_IP }}
+          ANSIBLE_PORT_SSH:           ${{ secrets.ANSIBLE_PORT_SSH }}
+          PORTFOLIO_VM_ANSIBLE_USER:  ${{ secrets.PORTFOLIO_VM_ANSIBLE_USER }}
+          PORTFOLIO_DOMAIN_PATHS:     ${{ secrets.PORTFOLIO_DOMAIN_PATHS }}
+          POTFOLIO_VM_KEY_PATH:       ${{ secrets.POTFOLIO_VM_KEY_PATH }}
+          ANSIBLE_VAULT_PASSWORD:     ${{ secrets.ANSIBLE_VAULT_PASS }}
+          KIBANA_VERSION:             ${{ secrets.KIBANA_VERSION }}
+          LOGSTASH_VERSION:           ${{ secrets.LOGSTASH_VERSION }}
+          NGINX_VERSION:              ${{ secrets.NGINX_VERSION }}
+          FILEBEAT_VERSION:           ${{ secrets.FILEBEAT_VERSION }}
+          ELASTICSEARCH_VERSION:      ${{ secrets.ELASTICSEARCH_VERSION }}
+
+      - name: Healthcheck service
+        run: |
+          chmod +x .github/scripts/healthcheck.sh
+          .github/scripts/healthcheck.sh
+        env:
+          POTFOLIO_API_HEALTHCHECK: ${{ secrets.POTFOLIO_API_HEALTHCHECK }}

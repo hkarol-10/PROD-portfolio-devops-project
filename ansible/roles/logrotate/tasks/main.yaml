@@ -1,0 +1,8 @@
+---
+# Entry point for the logrotate role.
+
+- import_tasks: nginx-logrotate.yaml
+  when: nginx_log_rotate
+
+- import_tasks: application-logrotate.yaml
+  when: inventory_hostname == "porfolio_vm"

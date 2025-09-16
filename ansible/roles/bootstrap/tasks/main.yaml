@@ -1,0 +1,15 @@
+---
+# Entry point for the bootstrap role.
+
+# 1. Prepare the data disk (format, mount)
+- import_tasks: disk_prepare.yaml
+
+# 2. Install required repos
+- import_tasks: add_apt_repos.yaml
+
+# 3. Ensure required tools are installed
+- import_tasks: tools.yaml
+
+# 4. Configure ssh 
+- import_tasks: ssh.yaml
+  when: lookup('env','ANSIBLE_PORT_SSH')

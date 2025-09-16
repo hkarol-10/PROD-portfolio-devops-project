@@ -1,0 +1,65 @@
+---
+- name: Install required tools
+  block:
+    - name: Ensure tools are instaled
+      apt:
+        name:
+          - docker-compose
+          - docker.io
+          - rsync
+          - logrotate
+          - telnet
+          - metricbeat
+        state: present
+
+- name: Prepare catalogs
+  block:
+    - name: Ensure common directories are in place
+      file:
+        path: "{{ item }}"
+        state: directory
+        owner: "{{ local_ansible_local_username }}"
+      loop:
+      - "{{ logs_home }}"
+      - "{{ filebeat_home_dir }}"
+      
+    - name: Ensure node log directory exists
+      file: 
+        path: "{{ application_logs_dir }}"
+        state: directory
+        owner: "{{ local_ansible_local_username }}"
+        mode: '0755'
+      when: inventory_hostname == "portfolio_vm"
+
+    - name: Ensure ELK directories are in place
+      file:
+        path: "{{ item }}"
+        state: directory
+        owner: "{{ local_ansible_local_username }}"
+      loop:
+        - "{{ logstash_config_dir }}"
+        - "{{ elk_data_dir }}"
+      when: inventory_hostname == "elk_vm"
+
+- name: Privilages check
+  block:
+    - name: Add required privilages
+      block:
+          - name: Ensure ansible user is in docker group
+            user:
+              name: "{{ local_ansible_local_username }}"
+              groups: docker
+              append: yes
+          - name: Ensure project directory exists with correct permissions
+            file:
+              path: "{{ project_home_dir }}"
+              state: directory
+              owner: "{{ local_ansible_local_username }}"
+              mode: '0755'
+          - name: Ensure ansible user has correct permissions on elk_data
+            file:
+              path: "{{ elk_data_dir }}"
+              state: directory
+              owner: "{{ local_ansible_local_username }}"
+              mode: '0770'
+            when: inventory_hostname == "elk_vm"

@@ -1,0 +1,16 @@
+metricbeat.modules:
+- module: system
+  metricsets:
+    - cpu
+    - memory
+    - network
+    - filesystem
+  period: 10s
+  enabled: true
+
+output.elasticsearch:
+  hosts: ["http://elk-vm:9200"]
+
+fields:
+  hostname: "{{ inventory_hostname }}"
+fields_under_root: true

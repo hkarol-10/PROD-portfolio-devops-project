@@ -1,0 +1,7 @@
+---
+
+- name: Enable and start metricbeat service
+  systemd:
+    name: metricbeat
+    state: started
+    enabled: yes

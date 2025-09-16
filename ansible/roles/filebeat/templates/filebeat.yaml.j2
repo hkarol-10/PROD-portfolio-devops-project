@@ -1,0 +1,12 @@
+filebeat.inputs:
+- type: log
+  enabled: true
+  paths:
+    - /var/log/nginx/*.log
+    - /app/logs/*.log
+  fields:
+    hostname: "{{ inventory_hostname }}"
+  fields_under_root: true
+
+output.logstash:
+  hosts: ["elk-vm:5044"]

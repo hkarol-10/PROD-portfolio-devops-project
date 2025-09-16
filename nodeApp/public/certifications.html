@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>K.H DevOps portfolio page</title>
+
+  <!-- Favicon (ikona zakładki) -->
+  <link rel="icon" href="images/favicon.png" type="image/png">
+
+  <!-- Wstępne ustawienie trybu, aby uniknąć migotania -->
+  <script>
+    (function() {
+      try {
+        const theme = localStorage.getItem("theme") || "dark";
+        document.documentElement.classList.add(theme);
+      } catch(e) {
+        console.error(e);
+      }
+    })();
+  </script>
+
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="header"></div>
+  <main>
+    <h1 id="certificationsTitle" class="page-title">My Certifications</h1>
+    <div class="cert-grid">
+      <div class="cert-card">
+        <div class="cert-img">
+          <img src="images/az104.png" alt="Azure Administrator Associate">
+        </div>
+        <div class="cert-label">
+          <p id="certAZ104">Azure Administrator Associate (AZ-104)</p>
+        </div>
+      </div>
+
+      <div class="cert-card">
+        <div class="cert-img">
+          <img src="images/istqb.png" alt="ISTQB">
+        </div>
+        <div class="cert-label">
+          <p id="certISTQB">ISTQB Certified Tester</p>
+        </div>
+      </div>
+
+      <div class="cert-card">
+        <div class="cert-img">
+          <img src="images/ITIL.png" alt="ITIL Foundation">
+        </div>
+        <div class="cert-label">
+          <p id="certITIL">ITIL Foundation</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Nowa sekcja z dodatkowymi certyfikatami -->
+    <h2 id="additionalCertsTitle" class="page-subtitle">Additional Certifications</h2>
+    <div class="cert-grid">
+      <div class="cert-card">
+        <div class="cert-img">
+          <img src="images/it_technician.png" alt="IT Technician">
+        </div>
+        <div class="cert-label">
+          <p id="certIT">IT Technician</p>
+        </div>
+      </div>
+
+      <div class="cert-card">
+        <div class="cert-img">
+          <img src="images/e12.png" alt="Assembly and operation of personal computers">
+        </div>
+        <div class="cert-label">
+          <p id="certE12">E.12. Assembly and operation of personal computers and external devices</p>
+        </div>
+      </div>
+
+      <div class="cert-card">
+        <div class="cert-img">
+          <img src="images/e13.png" alt="Designing of local networks">
+        </div>
+        <div class="cert-label">
+          <p id="certE13">E.13. Designing of local computer networks and network administration</p>
+        </div>
+      </div>
+
+      <div class="cert-card">
+        <div class="cert-img">
+          <img src="images/e14.png" alt="Web apps and DB admin">
+        </div>
+        <div class="cert-label">
+          <p id="certE14">E.14. Creation of web applications and databases and database administration</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div id="footer"></div>
+  <script src="js/main.js"></script>
+</body>
+</html>

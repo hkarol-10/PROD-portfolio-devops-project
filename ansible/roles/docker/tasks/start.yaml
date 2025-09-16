@@ -1,0 +1,5 @@
+---
+- name: Start Docker Compose in detached mode
+  shell: docker-compose -f {{ docker_compose_file }} up -d
+  args:
+    chdir: "{{ docker_home }}"

@@ -1,0 +1,7 @@
+---
+- name: Deploy logstash config file
+  template:
+    src: logstash.conf.j2
+    dest: "{{ logstash_config_file }}"
+    owner: "{{ local_ansible_local_username }}"
+    mode: '0755'

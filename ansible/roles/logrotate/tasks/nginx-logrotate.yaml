@@ -1,0 +1,15 @@
+---
+- name: Ensure nginx log directory exists
+  file:
+    path: "{{ nginx_logs_dir }}"
+    state: directory
+    owner: "{{ local_ansible_local_username }}"
+    mode: '0755'
+
+- name: Deploy nginx logrotate configuration
+  template:
+    src: nginx-logrotate.j2
+    dest: "{{ nginx_logrotate_conf }}"
+    owner: root
+    group: root
+    mode: '0644'

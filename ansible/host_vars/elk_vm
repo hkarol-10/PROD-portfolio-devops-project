@@ -1,0 +1,14 @@
+# ELK conf
+elk_data_dir:               "{{ project_home_dir }}/elk_data"
+logstash_config_dir:        "{{ project_home_dir }}/logstash"
+logstash_config_file:       "{{ logstash_config_dir }}/logstash.conf"
+
+# NGINX conf
+nginx_conf_template:         "defaultELK.conf.j2"
+nginx_app_https_enabled:     True
+nginx_https_enabled:         False
+nginx_basic_auth:            True #allways True due xpack.security.enabled=false
+
+# Docker conf
+docker_compose_template:     "docker-compose-nginx-elk.yml.j2"
+

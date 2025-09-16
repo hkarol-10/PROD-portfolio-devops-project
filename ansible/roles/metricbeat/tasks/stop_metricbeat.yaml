@@ -1,0 +1,6 @@
+---
+
+- name: Stop metricbeat if running
+  ansible.builtin.systemd:
+    name: metricbeat
+    state: stopped

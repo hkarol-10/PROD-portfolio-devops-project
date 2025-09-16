@@ -1,0 +1,95 @@
+version: "3.8"
+
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:{{ local_elasticsearch_version }}
+    container_name: elasticsearch
+    environment:
+      - node.name=elasticsearch
+      - discovery.type=single-node
+      - ES_JAVA_OPTS=-Xms768m -Xmx768m
+      - xpack.security.enabled=false
+      - bootstrap.memory_lock=true
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - "{{ elk_data_dir }}:/usr/share/elasticsearch/data"
+    ports:
+      - "9200:9200"
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 1.5g
+    restart: unless-stopped
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:{{ local_kibana_version }}
+    container_name: kibana
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    depends_on:
+      - elasticsearch
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 768m
+    restart: unless-stopped
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:{{ local_logstash_version }}
+    container_name: logstash
+    volumes:
+      - "{{ logstash_config_dir }}:/usr/share/logstash/pipeline:ro"
+    environment:
+      - LS_JAVA_OPTS=-Xms1g -Xmx1g
+    ports:
+      - "5044:5044"
+    depends_on:
+      - elasticsearch
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 2g
+    restart: unless-stopped
+
+  nginx:
+    image: nginx:{{ local_ngxinx_image_version }}
+    container_name: elk_nginx
+    ports:
+      - "443:443"
+      - "80:80"
+    volumes:
+      - "{{ nginx_conf }}:/etc/nginx/conf.d:ro"
+      - "{{ nginx_logs_dir }}:/var/log/nginx"
+{% if nginx_basic_auth %}
+      - "{{ nginx_htpasswd }}:/etc/nginx/.htpasswd:ro"
+{% endif %}
+    depends_on:
+      - kibana
+    deploy:
+      resources:
+        limits:
+          cpus: "0.2"
+          memory: 256m
+    restart: unless-stopped
+
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:{{ local_filebeat_version }}
+    container_name: filebeat
+    user: root
+    volumes:
+      - "{{ nginx_logs_dir }}:/var/log/nginx:ro"
+      - "{{ filebeat_config_file }}:/usr/share/filebeat/filebeat.yml:ro"
+    depends_on:
+      - nginx
+    deploy:
+      resources:
+        limits:
+          cpus: "0.2"
+          memory: 256m
+    restart: unless-stopped

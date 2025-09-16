@@ -1,0 +1,13 @@
+---
+# Entry point for the nginx role.
+
+# 1. Deploy nginx files
+- import_tasks: deploy.yaml
+
+# 2. Enable SSL/TLS
+- import_tasks: https.yaml
+  when: nginx_https_enabled and local_deploy_cert
+
+# 3. Enable basicauth if needed
+- import_tasks: basic-auth.yaml
+  when: nginx_basic_auth

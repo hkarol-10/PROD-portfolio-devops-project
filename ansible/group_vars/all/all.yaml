@@ -1,0 +1,57 @@
+---
+# Global variables shared for all hosts
+
+project_home_dir:  "{{ data_mount_point }}"
+logs_home:         "{{ project_home_dir }}/logs"
+logrotate_home:    "/etc/logrotate.d"
+
+# Device for 2nd data disk
+data_disk_device: /dev/sdb
+
+# Mount point for additional data disk
+data_mount_point: /mnt/data
+
+# Local envs/secrets
+local_ansible_local_username:  "{{ lookup('env','PORTFOLIO_VM_ANSIBLE_USER') }}"
+local_portfolio_ip_vm:         "{{ lookup('env','PORTFOLIO_VM_IP') }}"
+local_domain_key_path:         "{{ lookup('env','DOMAIN_KEY') }}"
+local_domain_cert_path:        "{{ lookup('env','DOMAIN_CERT') }}"
+local_ansible_key_path:        "{{ lookup('env','POTFOLIO_VM_KEY_PATH') }}"
+local_portfolio_domain_paths:  "{{ lookup('env','PORTFOLIO_DOMAIN_PATHS') }}"
+local_ansible_port:            "{{ lookup('env','ANSIBLE_PORT_SSH') | default(22) | int  }}"
+local_elk_ip_vm:               "{{ lookup('env','ELK_VM_IP') }}"
+local_elk_user:                "{{ lookup('env','ELK_USER') }}"
+local_elastic_password:        "{{ lookup('env','ELASTIC_PASSOWRD') }}"
+local_kibana_password:         "{{ lookup('env','KIBANA_PASSWORD') }}"
+local_ngxinx_image_version:    "{{ lookup('env','NGINX_VERSION') }}"
+local_filebeat_version:        "{{ lookup('env','FILEBEAT_VERSION') }}"
+local_elasticsearch_version:   "{{ lookup('env','ELASTICSEARCH_VERSION') }}"
+local_kibana_version:          "{{ lookup('env','KIBANA_VERSION') }}"
+local_logstash_version:        "{{ lookup('env','LOGSTASH_VERSION') }}"
+
+# Enable flag for local run, currently not working in cicd <todo>
+local_deploy_cert: False
+
+# docker config
+docker_home:                         "{{ project_home_dir }}/docker"
+docker_compose_file:                 "{{ docker_home }}/docker-compose.yaml"
+certs_home_dir:                      "{{ project_home_dir }}/certs"
+
+# nginx config
+nginx_home_dir:                      "{{ project_home_dir }}/nginx"
+nginx_logs_dir:                      "{{ logs_home }}/nginx"
+nginx_logrotate_conf:                "{{ logrotate_home }}/nginx-logrotate"
+nginx_conf:                          "{{ nginx_home_dir }}/conf.d"
+nginx_htpasswd:                      "{{ nginx_home_dir }}/.htpasswd"
+nginx_log_rotate:                    True
+nginx_logrotate_rotate:              14
+nginx_logrotate_frequency:           "daily"
+nginx_logrotate_compress:            True
+
+# filebeat config
+filebeat_home_dir:                  "{{project_home_dir}}/filebeat"
+filebeat_config_file:               "{{filebeat_home_dir}}/filebeat.yml"
+
+# metricbeat config
+metricbeat_home_dir:                  "{{project_home_dir}}/metricbeat"
+metricbeat_config_file:               "/etc/metricbeat/metricbeat.yml"

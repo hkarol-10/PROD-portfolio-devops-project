@@ -1,0 +1,82 @@
+upstream nodeapps { 
+    server nodeapp1:3000;
+    server nodeapp2:3000;
+}
+
+limit_req_zone $binary_remote_addr zone=mylimit:10m rate={{ rate_limit_requests_per_seconds }};
+
+# --- Redirect all HTTP to HTTPS ---
+server {
+    listen 80;
+    server_name {{ local_portfolio_domain_paths }};
+
+    return 301 https://$host$request_uri;
+}
+
+# --- HTTPS server ---
+server {
+    listen 443 ssl;
+    server_name {{ local_portfolio_domain_paths }};
+
+    server_tokens off;   # <--- hide nginx version
+
+{% if nginx_basic_auth %}
+    auth_basic "Restricted";
+    auth_basic_user_file /etc/nginx/.htpasswd;
+{% endif %}
+
+    ssl_certificate     /mnt/data/certs/fullchain.pem;
+    ssl_certificate_key /mnt/data/certs/key.pem;
+
+    # --- security headers ---
+    add_header X-Frame-Options "SAMEORIGIN";
+    add_header X-XSS-Protection "1; mode=block";
+    add_header X-Content-Type-Options "nosniff";
+
+    # Redirect root "/" to /index.html
+    location = / {
+        return 301 /index.html;
+    }
+
+    # Whitelist pages
+    location ~ ^/(index|experience|certifications|header|footer|infrastructure)\.html$ {
+        proxy_pass http://nodeapps;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    # Whitelist CSS&JS
+    location ~ ^/(css|js)/ {
+        proxy_pass http://nodeapps;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    # Whitelist health check with rate limiting
+    location /api/ {
+        limit_req zone=mylimit burst=10 nodelay;
+        proxy_pass http://nodeapps;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    # Whitelist images
+    location /images/ {
+        proxy_pass http://nodeapps;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    # Everything else → 403
+    location / {
+        return 403;
+    }
+}

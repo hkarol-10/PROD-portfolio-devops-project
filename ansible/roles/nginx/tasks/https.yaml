@@ -1,0 +1,28 @@
+---
+# disabled in ci/cd actions, requires upload certificate as secret and refactor below code
+# to consider
+
+- name: Prepare certificates directory
+  file:
+    path: "{{ certs_home_dir }}"
+    state: directory
+    owner: "{{ local_ansible_local_username }}"
+    mode: '0755'
+
+- name: Copy domain certificate to remote VM
+  synchronize:
+    src: "{{ local_domain_cert_path }}"
+    dest: "{{ certs_home_dir }}/fullchain.pem"
+    mode: push
+    checksum: yes
+    rsync_opts:
+      - "--chmod=0644"
+
+- name: Copy domain key to remote VM
+  synchronize:
+    src: "{{ local_domain_key_path }}"
+    dest: "{{ certs_home_dir }}/key.pem"
+    mode: push
+    checksum: yes
+    rsync_opts:
+      - "--chmod=0600"

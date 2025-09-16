@@ -1,0 +1,9 @@
+{{ nginx_logs_dir }}/*.log {
+    {{ nginx_logrotate_frequency }}
+    missingok
+    rotate {{ nginx_logrotate_rotate }}
+    {% if nginx_logrotate_compress %}compress{% endif %}
+    delaycompress
+    notifempty
+    copytruncate
+}

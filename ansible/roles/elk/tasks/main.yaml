@@ -1,0 +1,5 @@
+---
+# Entry point for the logstash
+
+# 1. Deploy logstash files
+- import_tasks: configure_logstash.yaml

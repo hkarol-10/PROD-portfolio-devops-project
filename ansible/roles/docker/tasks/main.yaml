@@ -1,0 +1,14 @@
+---
+# Entry point for the docker role.
+
+# 1. Deploy docker files
+- import_tasks: deploy.yaml
+
+# 2. build
+- import_tasks: build.yaml
+
+# 3. start
+- import_tasks: start.yaml
+
+# 4. prune old images
+- import_tasks: prune.yaml

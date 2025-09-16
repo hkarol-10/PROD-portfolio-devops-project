@@ -1,0 +1,57 @@
+# -------------------------
+# Terraform
+# -------------------------
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+*.tfvars.json
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terraform.tfstate.lock.info
+.terraformrc
+terraform.rc
+*.tfplan
+
+
+# Cache i logi ansible
+*.retry
+*.log
+
+# -------------------------
+# Node.js
+# -------------------------
+nodeApp/node_modules/
+nodeApp/npm-debug.log
+nodeApp/yarn-error.log
+nodeApp/dist/
+nodeApp/.env
+
+# -------------------------
+# Systems
+# -------------------------
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.idea/
+.vscode/
+*.bak
+
+# -------------------------
+# Logs i tymczasowe pliki
+# -------------------------
+*.log
+*.tmp
+*.temp
+*.pid
+*.seed
+*.sqlite
+
+# -------------------------
+# GitHub Actions / CI
+# -------------------------
+# Lokalne pliki środowiskowe lub tokeny
+*.env

@@ -1,0 +1,48 @@
+---
+- name: Ensure data disk is formatted and mounted
+  block:
+    - name: Check if disk is already formatted
+      command: lsblk -f {{ data_disk_device }} -o FSTYPE -n
+      register: disk_fs
+      ignore_errors: yes
+
+    - name: Format the disk if it is not formatted
+      filesystem:
+        fstype: ext4
+        dev: "{{ data_disk_device }}"
+      when: disk_fs.stdout == ""
+
+    - name: Create mount point directory
+      file:
+        path: "{{ data_mount_point }}"
+        state: directory
+        owner: root
+        group: root
+        mode: '0755'
+      when: disk_fs.stdout == ""
+
+    - name: Mount the disk
+      mount:
+        path: "{{ data_mount_point }}"
+        src: "{{ data_disk_device }}"
+        fstype: ext4
+        state: mounted
+        opts: defaults
+      when: disk_fs.stdout == ""
+
+    - name: Ensure disk is mounted on boot
+      mount:
+        path: "{{ data_mount_point }}"
+        src: "{{ data_disk_device }}"
+        fstype: ext4
+        state: present
+        opts: defaults
+      when: disk_fs.stdout == ""
+    
+    - name: Ensure perrmissions are correct
+      file:
+        path: "{{ data_mount_point }}"
+        state: directory
+        owner: "{{ local_ansible_local_username }}"
+        mode: '0755'
+      when: disk_fs.stdout == ""

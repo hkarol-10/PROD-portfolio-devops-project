@@ -1,0 +1,5 @@
+---
+# Entry point for the filebeat
+
+# 1. Deploy filebeat files
+- import_tasks: configure_filebeat.yaml

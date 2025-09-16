@@ -1,0 +1,18 @@
+---
+- name: Check if Docker Compose is running
+  shell: docker-compose -f {{ docker_compose_file }} ps -q
+  args:
+    chdir: "{{ docker_home }}"
+  register: compose_status
+  ignore_errors: yes
+
+- name: Stop Docker Compose if running
+  shell: docker-compose -f {{ docker_compose_file }} down
+  args:
+    chdir: "{{ docker_home }}"
+  when: compose_status.stdout != ""
+
+- name: Rebuild Docker Compose images
+  shell: docker-compose -f {{ docker_compose_file }} build --no-cache
+  args:
+    chdir: "{{ docker_home }}"

@@ -1,0 +1,9 @@
+{{ application_logs_dir }}/*.log {
+    {{ application_logrotate_frequency }}
+    missingok
+    rotate {{ application_logrotate_rotate }}
+    {% if application_logrotate_compress %}compress{% endif %}
+    delaycompress
+    notifempty
+    copytruncate
+}

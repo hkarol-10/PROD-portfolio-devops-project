@@ -1,0 +1,16 @@
+---
+- name: Prepare docker catalog
+  block:
+    - name: Ensure docker directory exists with correct permissions
+      file:
+        path: "{{ docker_home }}"
+        state: directory
+        owner: "{{ local_ansible_local_username }}"
+        mode: '0755'
+
+- name: Deploy docker-compose file
+  template:
+    src: "{{ docker_compose_template }}"
+    dest: "{{ docker_home }}/docker-compose.yaml"
+    owner: "{{ local_ansible_local_username }}"
+    mode: '0755'

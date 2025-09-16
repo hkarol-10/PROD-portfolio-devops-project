@@ -1,0 +1,7 @@
+---
+- name: Deploy filebeat config file
+  template:
+    src: filebeat.yaml.j2
+    dest: "{{ filebeat_config_file }}"
+    owner: root # filebeat requres root in the container
+    mode: '0755'

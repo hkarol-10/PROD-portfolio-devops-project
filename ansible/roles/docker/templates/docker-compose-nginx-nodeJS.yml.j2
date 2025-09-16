@@ -1,0 +1,49 @@
+version: "3.8"
+
+services:
+  nodeapp1:
+    build: {{ application_home_dir }}
+    container_name: nodeapp1
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+
+  nodeapp2:
+    build: {{ application_home_dir }}
+    container_name: nodeapp2
+    ports:
+      - "3001:3000"
+    restart: unless-stopped
+
+  nginx:
+    image: nginx:{{ local_ngxinx_image_version }}
+    container_name: nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "{{ nginx_conf }}:/etc/nginx/conf.d:ro"
+      - "{{ nginx_logs_dir }}:/var/log/nginx"
+      - "{{ application_logs_dir }}:/app/logs"
+{% if nginx_basic_auth %}
+      - "{{ nginx_htpasswd }}:/etc/nginx/.htpasswd:ro"
+{% endif %}
+{% if nginx_https_enabled %}
+      - "{{ certs_home_dir }}:/mnt/data/certs:ro"   
+{% endif %}
+    depends_on:
+      - nodeapp1
+      - nodeapp2
+    restart: unless-stopped
+    
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:{{ local_filebeat_version }}
+    container_name: filebeat
+    user: root
+    volumes:
+      - "{{ nginx_logs_dir }}:/var/log/nginx:ro"
+      - "{{ application_logs_dir }}:/app/logs:ro"
+      - "{{ filebeat_config_file }}:/usr/share/filebeat/filebeat.yml:ro"
+    depends_on:
+      - nginx
+    restart: unless-stopped

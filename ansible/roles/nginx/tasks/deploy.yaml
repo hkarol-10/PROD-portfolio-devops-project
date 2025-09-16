@@ -1,0 +1,22 @@
+---
+- name: Prepare nginx
+  block:
+    - name: Ensure nginx directory exists with correct permissions
+      file:
+        path: "{{ nginx_home_dir }}"
+        state: directory
+        owner: "{{ local_ansible_local_username }}"
+        mode: '0755'
+    - name: Ensure nginx config directory exists
+      file:
+        path: "{{ nginx_conf }}"
+        state: directory
+        owner: "{{ local_ansible_local_username }}"
+        mode: '0755'
+        
+    - name: Deploy nginx conf from template
+      template:
+        src: "{{ nginx_conf_template }}"
+        dest: "{{ nginx_conf }}/default.conf"
+        owner: "{{ local_ansible_local_username }}"
+        mode: '0644'

@@ -1,0 +1,9 @@
+---
+# The file is encrypted by ansible-vault 
+- name: Deploy .htpasswd file for basic auth
+  template:
+    src: htpasswd.j2
+    dest: "{{ nginx_htpasswd }}"
+    owner: "{{ local_ansible_local_username }}"
+    mode: '0644'
+  when: nginx_basic_auth

@@ -1,0 +1,9 @@
+---
+
+- name: Deploy node logrotate configuration
+  template:
+    src: node-logrotate.j2
+    dest: "{{ application_logrotate_conf }}"
+    owner: root
+    group: root
+    mode: '0644'

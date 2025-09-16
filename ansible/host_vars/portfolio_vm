@@ -1,0 +1,17 @@
+# application config
+application_home_dir:                "{{ project_home_dir }}/app"
+application_logs_dir:                "{{ logs_home }}/node"
+application_logrotate_frequency:     "daily"
+application_logrotate_rotate:        14
+application_log_rotate:              True
+application_logrotate_conf:          "{{ logrotate_home }}/node-logrotate"   
+application_logrotate_compress:      True
+
+# nginx config
+nginx_conf_template:                 "defaultAPP.conf.j2"
+nginx_https_enabled:                 True
+nginx_basic_auth:                    False
+rate_limit_requests_per_seconds:     "5r/s"
+
+# docker config
+docker_compose_template: "docker-compose-nginx-nodeJS.yml.j2"
