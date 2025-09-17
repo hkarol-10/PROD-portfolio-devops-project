@@ -7,7 +7,7 @@ START_TIME=$(date +%s)
 AGENT="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/116.0.0.0 Safari/537.36" 
 
 while true; do
-  STATUS=$(curl -A "$AGENT" -o /dev/null -s -w "%{http_code}" -L "$POTFOLIO_API_HEALTHCHECK" || echo "000")
+  STATUS=$(curl -A "$AGENT" -o /dev/null -s -w "%{http_code}" -L "$PORTFOLIO_API_HEALTHCHECK" || echo "000")
   
 # Check for HTTP response in a loop 
 # status 200 or 401 if basic auth enabled or 403 because cloudflare is sometimes blocking runners traffic

@@ -1,9 +1,10 @@
 # Portfolio DevOps Project
 
-| CI/CD / Deployment Status |
-|---------------------------|
-| ![Portfolio CI/CD](https://github.com/hkarol-10/PROD-portfolio-devops-project/actions/workflows/portfolio-cicd.yaml/badge.svg) |
-
+| GitHub Action                  | Status |
+|-------------------------------|-------|
+| Deployment     | [![Portfolio CI/CD](https://github.com/hkarol-10/PROD-portfolio-devops-project/actions/workflows/portfolio-cicd.yaml/badge.svg)](https://github.com/hkarol-10/PROD-portfolio-devops-project/actions/workflows/portfolio-cicd.yaml) |
+| VMs online/offline schedule | [![VM Schedule](https://github.com/hkarol-10/PROD-portfolio-devops-project/actions/workflows/portfolio-vm-auto.yaml/badge.svg)](https://github.com/hkarol-10/PROD-portfolio-devops-project/actions/workflows/portfolio-vm-auto.yaml) |
+| Terraform tfstate watcher | [![Infra watcher](https://github.com/hkarol-10/PROD-portfolio-devops-project/actions/workflows/portfolio-terrraform-infra-watcher.yaml/badge.svg)](https://github.com/hkarol-10/PROD-portfolio-devops-project/actions/workflows/portfolio-terrraform-infra-watcher.yaml) |
 
 
 This project is a personal DevOps portfolio setup using the stack below:
@@ -57,19 +58,42 @@ It was created as an after-hours side-project to showcase infrastructure, toolin
 
 ## CI/CD
 
+CI/CD flow diagram:
+
+```mermaid
+flowchart TD
+    A[Push to main branch] --> B[Run Terraform apply]
+    B --> C[Run Ansible Playbooks]
+    C --> D[Run Healthcheck Script]
+    D -->|Success| E[Deployment OK]
+    D -->|Failure| F[Notify me via e-mail]
+
+    style A fill:#cce5ff,stroke:#333,stroke-width:1px,color:#000
+    style B fill:#cce5ff,stroke:#333,stroke-width:1px,color:#000
+    style C fill:#cce5ff,stroke:#333,stroke-width:1px,color:#000
+    style D fill:#cce5ff,stroke:#333,stroke-width:1px,color:#000
+    style E fill:#9fdf9f,stroke:#333,stroke-width:1px,color:#000
+    style F fill:#f5a3a3,stroke:#333,stroke-width:1px,color:#000
+```
+
 The project includes a **GitHub Actions workflow** that can:
 
-1. Run Ansible playbooks to deploy the applications
-2. Run healthcheck script to check the deplyoment result
+[healthcheck.sh](.github\workflows\portfolio-cicd.yaml)
+  1. Run Terraform apply to build infrastracture
+  2. Run Ansible playbooks to deploy the applications 
+  3. Run healthcheck script to check the deployment result [healthcheck.sh](.github/scripts/healthcheck.sh)
+
+Additional ci/cd features:
+A. Auto manged VM schedule - turn off VMs at 1:00 and turn on 7:00 for cost optimization [portfolio-terrraform-infra-watcher.yaml](.github\workflows\portfolio-terrraform-infra-watcher.yaml)
+B. Terraform infra watcher - scheduled run to check if infrastracture meets the tf.state or needs to be updated [portfolio-vm-auto.yaml](.github\workflows\portfolio-vm-auto.yaml)
+
 
 todo (work-in-progress):
-- Terraform apply
-- Terraform automatic markdown **README.md**
-- Scheduled GitHub action to turn off VMs at 23:00 and turn on 7:00 (cost optymalization)
+- Terraform auto-documentation by terraform markdown > **README.md**
 
 ## Features
 
-- Infrastructure as code (IaC) using Terraform.
+- Infrastructure as code (IaC) using Terraform -> tfstate is versioned and proctected in GoogleCloudBucket, available to cicd
 - Node.js application served via NGINX.
 - Automatic HTTPS setup 
 - Centralized log observability in Kibana.

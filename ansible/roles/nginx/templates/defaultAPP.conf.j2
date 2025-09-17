@@ -35,7 +35,7 @@ server {
 
     # Redirect root "/" to /index.html
     location = / {
-        return 301 /index.html;
+        return 301 /index.html?$args;
     }
 
     # Whitelist pages

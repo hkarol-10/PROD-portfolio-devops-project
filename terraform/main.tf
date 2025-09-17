@@ -1,3 +1,17 @@
+#################
+# Terraform bucket
+#################
+
+terraform {
+  backend "gcs" {
+    bucket = "portfolio-terraform-bucket"
+  }
+}
+
+#################
+# Resources
+#################
+
 resource "google_compute_instance" "portfolio_vm" {
   name         = var.app_vm_name
   machine_type = var.app_vm_size
@@ -24,7 +38,7 @@ resource "google_compute_instance" "portfolio_vm" {
     network = google_compute_network.portfolio_network.id
     access_config {
       nat_ip = google_compute_address.portfolio_static_ip.address
-    } # public/static IP
+    }
   }
 
   tags = ["portfolio-vm"]
@@ -62,7 +76,7 @@ resource "google_compute_instance" "elk_vm" {
     network = google_compute_network.portfolio_network.id
     access_config {
       nat_ip = google_compute_address.elk_static_ip.address
-    } # public/static IP
+    }
   }
 
   tags = ["elk-vm"]
@@ -72,5 +86,4 @@ resource "google_compute_instance" "elk_vm" {
       metadata["ssh-keys"]
     ]
   }
-
 }
