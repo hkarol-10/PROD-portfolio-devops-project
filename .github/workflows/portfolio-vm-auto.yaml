@@ -1,0 +1,39 @@
+name: Portfolio VM Auto
+
+on:
+  schedule:
+    - cron: '1 5,21 * * *'  # 07:01 & 23:01 Poland (CEST)
+  workflow_dispatch:
+
+jobs:
+  vm-auto:
+    name: Portfolio VM Auto
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Show current time
+        run: date
+
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+      
+      - name: Set up Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ secrets.GOOGLE_PROJECT_ID }}
+      
+
+      - name: Make script executable
+        run: chmod +x .github/scripts/auto_vm_schedule.sh
+
+      - name: Run auto_vm_schedule bash script
+        run: bash .github/scripts/auto_vm_schedule.sh
+        env:
+          PORTFOLIO_VM_NAME: ${{ secrets.PORTFOLIO_VM_NAME }}
+          MONITORING_VM_NAME: ${{ secrets.MONITORING_VM_NAME }}
+          ZONE: ${{ secrets.VM_ZONE }}

@@ -1,4 +1,4 @@
-name: Portfolio Ansible Deploy
+name: Portfolio deployment
 
 on:
   push:
@@ -11,9 +11,65 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  ansible:
-    name: Ansible Deploy
+  terraform_apply:
+    name: Terraform apply
     runs-on: ubuntu-latest
+    env:
+      TF_VAR_project_id: ${{ secrets.TF_VAR_PROJECT_ID }}
+      TF_VAR_region: ${{ secrets.TF_VAR_REGION }}
+      TF_VAR_zone: ${{ secrets.TF_VAR_ZONE }}
+      TF_VAR_app_vm_name: ${{ secrets.TF_VAR_APP_VM_NAME }}
+      TF_VAR_elk_vm_name: ${{ secrets.TF_VAR_ELK_VM_NAME }}
+      TF_VAR_allowed_ssh_cidr: ${{ secrets.TF_VAR_ALLOWED_SSH_CIDR }}
+      TF_VAR_allowed_ssh_port: ${{ secrets.TF_VAR_ALLOWED_SSH_PORT }}
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.9.0
+
+      - name: Authenticate to GCP
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+
+      - name: Terraform Init
+        run: terraform -chdir=terraform init
+
+      - name: Terraform Apply
+        run: |
+          set -o pipefail
+          terraform -chdir=terraform apply -auto-approve -no-color > apply.log 2>&1
+          status=$?
+          if [ $status -eq 0 ]; then
+            echo "Terraform apply succeeded!"
+          else
+            echo "Terraform apply failed"
+            exit $status
+          fi
+          rm -f apply.log
+
+  ansible_deploy:
+    name: Ansible Deploy
+    needs: terraform_apply
+    runs-on: ubuntu-latest
+    env:
+          PORTFOLIO_VM_IP:            ${{ secrets.PORTFOLIO_VM_IP }}
+          ELK_VM_IP:                  ${{ secrets.ELK_VM_IP }}
+          ANSIBLE_PORT_SSH:           ${{ secrets.ANSIBLE_PORT_SSH }}
+          PORTFOLIO_VM_ANSIBLE_USER:  ${{ secrets.PORTFOLIO_VM_ANSIBLE_USER }}
+          PORTFOLIO_DOMAIN_PATHS:     ${{ secrets.PORTFOLIO_DOMAIN_PATHS }}
+          POTFOLIO_VM_KEY_PATH:       ${{ secrets.POTFOLIO_VM_KEY_PATH }}
+          ANSIBLE_VAULT_PASSWORD:     ${{ secrets.ANSIBLE_VAULT_PASS }}
+          KIBANA_VERSION:             ${{ secrets.KIBANA_VERSION }}
+          LOGSTASH_VERSION:           ${{ secrets.LOGSTASH_VERSION }}
+          NGINX_VERSION:              ${{ secrets.NGINX_VERSION }}
+          FILEBEAT_VERSION:           ${{ secrets.FILEBEAT_VERSION }}
+          ELASTICSEARCH_VERSION:      ${{ secrets.ELASTICSEARCH_VERSION }}
 
     steps:
       - name: Checkout repository
@@ -37,23 +93,19 @@ jobs:
         run: |
           ansible-playbook -i ansible/inventory.yaml ansible/playbook.yaml \
            --vault-password-file=<(echo "$ANSIBLE_VAULT_PASSWORD")
-        env:
-          PORTFOLIO_VM_IP:            ${{ secrets.PORTFOLIO_VM_IP }}
-          ELK_VM_IP:                  ${{ secrets.ELK_VM_IP }}
-          ANSIBLE_PORT_SSH:           ${{ secrets.ANSIBLE_PORT_SSH }}
-          PORTFOLIO_VM_ANSIBLE_USER:  ${{ secrets.PORTFOLIO_VM_ANSIBLE_USER }}
-          PORTFOLIO_DOMAIN_PATHS:     ${{ secrets.PORTFOLIO_DOMAIN_PATHS }}
-          POTFOLIO_VM_KEY_PATH:       ${{ secrets.POTFOLIO_VM_KEY_PATH }}
-          ANSIBLE_VAULT_PASSWORD:     ${{ secrets.ANSIBLE_VAULT_PASS }}
-          KIBANA_VERSION:             ${{ secrets.KIBANA_VERSION }}
-          LOGSTASH_VERSION:           ${{ secrets.LOGSTASH_VERSION }}
-          NGINX_VERSION:              ${{ secrets.NGINX_VERSION }}
-          FILEBEAT_VERSION:           ${{ secrets.FILEBEAT_VERSION }}
-          ELASTICSEARCH_VERSION:      ${{ secrets.ELASTICSEARCH_VERSION }}
 
-      - name: Healthcheck service
-        run: |
-          chmod +x .github/scripts/healthcheck.sh
-          .github/scripts/healthcheck.sh
-        env:
-          POTFOLIO_API_HEALTHCHECK: ${{ secrets.POTFOLIO_API_HEALTHCHECK }}
+  application_healthcheck:
+      name: Run healthcheck
+      needs: ansible_deploy
+      runs-on: ubuntu-latest
+  
+      steps:
+        - name: Checkout repository
+          uses: actions/checkout@v3
+  
+        - name: Healthcheck service
+          run: |
+            chmod +x .github/scripts/healthcheck.sh
+            .github/scripts/healthcheck.sh
+          env:
+            PORTFOLIO_API_HEALTHCHECK: ${{ secrets.PORTFOLIO_API_HEALTHCHECK }}
