@@ -78,14 +78,14 @@ flowchart TD
 
 The project includes a **GitHub Actions workflow** that can:
 
-[healthcheck.sh](.github\workflows\portfolio-cicd.yaml)
+[portfolio-cicd.yaml](.github/workflows/portfolio-cicd.yaml)
   1. Run Terraform apply to build infrastracture
   2. Run Ansible playbooks to deploy the applications 
-  3. Run healthcheck script to check the deployment result [healthcheck.sh](.github/scripts/healthcheck.sh)
+  3. Run [healthcheck.sh](.github/scripts/healthcheck.sh) to check the deployment result 
 
 Additional ci/cd features:
-A. Auto manged VM schedule - turn off VMs at 1:00 and turn on 7:00 for cost optimization [portfolio-terrraform-infra-watcher.yaml](.github\workflows\portfolio-terrraform-infra-watcher.yaml)
-B. Terraform infra watcher - scheduled run to check if infrastracture meets the tf.state or needs to be updated [portfolio-vm-auto.yaml](.github\workflows\portfolio-vm-auto.yaml)
+  1. Auto manged VM schedule - turn off VMs at 1:00 and turn on 7:00 for cost optimization [portfolio-terraform-infra-watcher.yaml](.github/workflows/portfolio-terraform-infra-watcher.yaml)
+  2. Terraform infra watcher - scheduled run to check if infrastracture meets the tf.state or needs to be updated [portfolio-vm-auto.yaml](.github/workflows/portfolio-vm-auto.yaml)
 
 
 todo (work-in-progress):
