@@ -33,6 +33,11 @@ server {
     add_header X-XSS-Protection "1; mode=block";
     add_header X-Content-Type-Options "nosniff";
 
+    # Redirect /tag=anything → /index.html
+    location ~ ^/tag= {
+    return 301 /index.html;
+    }
+    
     # Redirect root "/" to /index.html
     location = / {
         return 301 /index.html?$args;
