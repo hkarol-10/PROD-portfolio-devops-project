@@ -77,22 +77,22 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-     - name: Setup SSH key
-       run: |
+      - name: Setup SSH key
+        run: |
          mkdir -p ~/.ssh
          echo "${{ secrets.PORTFOLIO_VM_KEY_CI }}" > ~/.ssh/ansible
          chmod 600 ~/.ssh/ansible
 
-     - name: Add VM to known_hosts
-       run: |
+      - name: Add VM to known_hosts
+        run: |
          ssh-keyscan -p ${{ secrets.ANSIBLE_PORT_SSH }} -H ${{ secrets.PORTFOLIO_VM_IP }} >> ~/.ssh/known_hosts
          ssh-keyscan -p ${{ secrets.ANSIBLE_PORT_SSH }} -H ${{ secrets.ELK_VM_IP }} >> ~/.ssh/known_hosts
 
-     - name: Install Ansible
-       run: sudo apt-get update && sudo apt-get install -y ansible
+      - name: Install Ansible
+        run: sudo apt-get update && sudo apt-get install -y ansible
 
-     - name: Run Ansible Playbook
-       run: |
+      - name: Run Ansible Playbook
+        run: |
          ansible-playbook -i ansible/inventory.yaml ansible/playbook.yaml \
           --vault-password-file=<(echo "$ANSIBLE_VAULT_PASSWORD")
 
