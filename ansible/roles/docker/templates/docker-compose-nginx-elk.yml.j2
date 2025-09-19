@@ -44,6 +44,7 @@ services:
     container_name: logstash
     volumes:
       - "{{ logstash_config_dir }}:/usr/share/logstash/pipeline:ro"
+      - "{{ logstash_config_templates }}:/usr/share/logstash/templates:ro"
     environment:
       - LS_JAVA_OPTS=-Xms1g -Xmx1g
     ports:

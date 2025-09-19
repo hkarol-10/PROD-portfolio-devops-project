@@ -1,0 +1,31 @@
+{
+  "index_patterns": ["web-logs*"],
+  "priority": 100,
+  "template": {
+    "settings": {
+      "index": {
+        "codec": "best_compression",
+        "lifecycle": {
+          "name": "web-logs"
+        },
+        "routing": {
+          "allocation": {
+            "include": {
+              "_tier_preference": "data_hot"
+            }
+          }
+        },
+        "mapping": {
+          "ignore_malformed": "true"
+        }
+      }
+    },
+    "mappings": {
+      "date_detection": false,
+      "properties": {
+        "@timestamp": { "type": "date" },
+        "tracker_parsed": { "type": "geo_point" }
+      }
+    }
+  }
+}

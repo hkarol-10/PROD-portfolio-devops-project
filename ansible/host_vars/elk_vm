@@ -1,7 +1,7 @@
 # ELK conf
 elk_data_dir:               "{{ project_home_dir }}/elk_data"
 logstash_config_dir:        "{{ project_home_dir }}/logstash"
-logstash_config_file:       "{{ logstash_config_dir }}/logstash.conf"
+logstash_config_templates:  "{{ logstash_config_dir }}/templates"
 
 # NGINX conf
 nginx_conf_template:         "defaultELK.conf.j2"

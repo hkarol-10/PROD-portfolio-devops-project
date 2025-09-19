@@ -1,14 +1,13 @@
 # ===============================
-# Firewall
+# Firewall Rules
 # ===============================
-
 
 # ===============================
 # Allow ssh port + my IP
 # ===============================
 resource "google_compute_firewall" "ssh_fw" {
   name    = "portfolio-fw-ssh"
-  network = google_compute_network.portfolio_network.id
+  network = var.network_id
 
   allow {
     protocol = "tcp"
@@ -16,17 +15,16 @@ resource "google_compute_firewall" "ssh_fw" {
   }
 
   source_ranges = [var.allowed_ssh_cidr]
-  target_tags = ["portfolio-vm","elk-vm"]
+  target_tags   = ["portfolio-vm", "elk-vm"]
   priority      = 100
 }
-
 
 # ===============================
 # Deny all http
 # ===============================
 resource "google_compute_firewall" "http_fw" {
   name    = "portfolio-fw-http"
-  network = google_compute_network.portfolio_network.id
+  network = var.network_id
 
   deny {
     protocol = "tcp"
@@ -34,7 +32,7 @@ resource "google_compute_firewall" "http_fw" {
   }
 
   source_ranges = [var.blocked_http_cidr]
-  target_tags = ["portfolio-vm","elk-vm"]
+  target_tags   = ["portfolio-vm", "elk-vm"]
   priority      = 200
 }
 
@@ -43,7 +41,7 @@ resource "google_compute_firewall" "http_fw" {
 # ===============================
 resource "google_compute_firewall" "http_fw_whitelist" {
   name    = "portfolio-fw-http-allow-my-ip"
-  network = google_compute_network.portfolio_network.id
+  network = var.network_id
 
   allow {
     protocol = "tcp"
@@ -51,17 +49,16 @@ resource "google_compute_firewall" "http_fw_whitelist" {
   }
 
   source_ranges = [var.allowed_ssh_cidr]
-  target_tags = ["portfolio-vm","elk-vm"]
+  target_tags   = ["portfolio-vm", "elk-vm"]
   priority      = 199
 }
-
 
 # ===============================
 # Allow all https
 # ===============================
 resource "google_compute_firewall" "https_fw" {
   name    = "portfolio-fw-https"
-  network = google_compute_network.portfolio_network.id
+  network = var.network_id
 
   allow {
     protocol = "tcp"
@@ -69,7 +66,7 @@ resource "google_compute_firewall" "https_fw" {
   }
 
   source_ranges = [var.allowed_http_cidr]
-  target_tags = ["portfolio-vm","elk-vm"]
+  target_tags   = ["portfolio-vm", "elk-vm"]
   priority      = 200
 }
 
@@ -82,7 +79,7 @@ data "http" "github_actions_ips" {
 }
 
 locals {
-  github_actions_cidrs_raw  = try([for cidr in jsondecode(data.http.github_actions_ips.response_body).actions : cidr], [])
+  github_actions_cidrs_raw = try([for cidr in jsondecode(data.http.github_actions_ips.response_body).actions : cidr], [])
 
   # only IPv4
   github_actions_cidrs_ipv4 = [
@@ -98,7 +95,7 @@ resource "google_compute_firewall" "ssh_fw_ci" {
   for_each = { for idx, cidrs in local.github_actions_chunks : idx => cidrs }
 
   name    = "portfolio-fw-ssh-ci-${each.key}"
-  network = google_compute_network.portfolio_network.id
+  network = var.network_id
 
   allow {
     protocol = "tcp"
@@ -106,7 +103,7 @@ resource "google_compute_firewall" "ssh_fw_ci" {
   }
 
   source_ranges = each.value
-  target_tags = ["portfolio-vm","elk-vm"]
+  target_tags   = ["portfolio-vm", "elk-vm"]
   priority      = 110
 }
 
@@ -115,7 +112,7 @@ resource "google_compute_firewall" "ssh_fw_ci" {
 # ===============================
 resource "google_compute_firewall" "logstash_beats_fw" {
   name    = "portfolio-fw-logstash-5044"
-  network = google_compute_network.portfolio_network.id
+  network = var.network_id
 
   allow {
     protocol = "tcp"
@@ -134,7 +131,7 @@ resource "google_compute_firewall" "logstash_beats_fw" {
 # ===============================
 resource "google_compute_firewall" "logstash_metricbeat_fw" {
   name    = "portfolio-fw-logstash-9200"
-  network = google_compute_network.portfolio_network.id
+  network = var.network_id
 
   allow {
     protocol = "tcp"
