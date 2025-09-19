@@ -1,7 +1,28 @@
 ---
-- name: Deploy logstash config file
+- name: Deploy logstash input config
   template:
-    src: logstash.conf.j2
-    dest: "{{ logstash_config_file }}"
+    src: 100-input.conf.j2
+    dest: "{{ logstash_config_dir }}/100-input.conf"
     owner: "{{ local_ansible_local_username }}"
-    mode: '0755'
+    mode: '0644'
+
+- name: Deploy logstash filter config
+  template:
+    src: 200-filter-conf.j2
+    dest: "{{ logstash_config_dir }}/200-filter.conf"
+    owner: "{{ local_ansible_local_username }}"
+    mode: '0644'
+
+- name: Deploy logstash output config
+  template:
+    src: 300-output.conf.j2
+    dest: "{{ logstash_config_dir }}/300-output.conf"
+    owner: "{{ local_ansible_local_username }}"
+    mode: '0644'
+
+- name: Deploy logstash logs template
+  template:
+    src: web_template.json.j2
+    dest: "{{ logstash_config_templates }}/web_template.json"
+    owner: "{{ local_ansible_local_username }}"
+    mode: '0644'

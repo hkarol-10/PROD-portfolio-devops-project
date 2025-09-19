@@ -1,0 +1,28 @@
+filter {
+  if [log][file][path] =~ "nginx" {
+    grok {
+      match => { "message" => '%{IPORHOST:client_ip} - %{USER:remote_user} \[%{HTTPDATE:timestamp}\] "%{WORD:method} %{URIPATHPARAM:request} HTTP/%{NUMBER:http_version}" %{NUMBER:status} %{NUMBER:bytes} "(?:%{URI:referrer}|-)" "(?:%{DATA:user_agent}|-)" "(?:%{IPORHOST:forwarded_for}|-)"' }
+    }
+
+    date {
+      match => [ "timestamp", "dd/MMM/yyyy:HH:mm:ss Z" ]
+      target => "@timestamp"
+    }
+
+    if [forwarded_for] and [forwarded_for] != "-" {
+      geoip {
+        source => "forwarded_for"
+        target => "geoip"
+        fields => ["city_name","country_name","country_code2","continent_code","region_name","location"]
+      }
+
+      if [geoip][geo][location] {
+        mutate {
+          add_field => {
+            "[tracker_parsed]" => "%{[geoip][geo][location][lat]},%{[geoip][geo][location][lon]}"
+          }
+        }
+      }
+    }
+  }
+}

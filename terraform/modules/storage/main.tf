@@ -1,4 +1,19 @@
-# data disc snapshot
+# Additional data disks
+resource "google_compute_disk" "portfolio_data_disk" {
+  name  = "portfolio-data-disk"
+  type  = "pd-standard"
+  zone  = var.zone
+  size  = var.portfolio_disk_size
+}
+
+resource "google_compute_disk" "elk_data_disk" {
+  name  = "elk-data-disk"
+  type  = "pd-standard"
+  zone  = var.zone
+  size  = var.elk_disk_size
+}
+
+# Data disc snapshot
 resource "google_compute_snapshot" "portfolio_data_disk_snapshot" {
   name        = "portfolio-data-disk-snapshot-v2"
   source_disk = google_compute_disk.portfolio_data_disk.id

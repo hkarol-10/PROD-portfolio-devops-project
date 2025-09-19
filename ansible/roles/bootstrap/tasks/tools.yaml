@@ -38,6 +38,7 @@
         owner: "{{ local_ansible_local_username }}"
       loop:
         - "{{ logstash_config_dir }}"
+        - "{{ logstash_config_templates}}"
         - "{{ elk_data_dir }}"
       when: inventory_hostname == "elk_vm"
 

@@ -9,81 +9,50 @@ terraform {
 }
 
 #################
-# Resources
+# Modules
 #################
 
-resource "google_compute_instance" "portfolio_vm" {
-  name         = var.app_vm_name
-  machine_type = var.app_vm_size
-  zone         = var.zone
-  shielded_instance_config {
-    enable_secure_boot          = true
-    enable_vtpm                 = true
-    enable_integrity_monitoring = true
-  }
-  allow_stopping_for_update = true 
-
-  boot_disk {
-    initialize_params {
-      image = "debian-cloud/debian-12"
-    }
-  }
-
-  attached_disk {
-    source = google_compute_disk.portfolio_data_disk.id
-    mode   = "READ_WRITE"
-  }
-
-  network_interface {
-    network = google_compute_network.portfolio_network.id
-    access_config {
-      nat_ip = google_compute_address.portfolio_static_ip.address
-    }
-  }
-
-  tags = ["portfolio-vm"]
-  
-  lifecycle {
-    ignore_changes = [
-      metadata["ssh-keys"]
-    ]
-  }
+# Network module
+module "network" {
+  source = "./modules/network"
+  region = var.region
 }
 
-resource "google_compute_instance" "elk_vm" {
-  name         = var.elk_vm_name
-  machine_type = var.app_vm_size
-  zone         = var.zone
-  shielded_instance_config {
-    enable_secure_boot          = true
-    enable_vtpm                 = true
-    enable_integrity_monitoring = true
-  }
-  allow_stopping_for_update = true 
+# Storage module
+module "storage" {
+  source               = "./modules/storage"
+  zone                 = var.zone
+  region               = var.region
+  portfolio_disk_size  = var.disk_size
+  elk_disk_size        = var.elk_disk_size
+}
 
-  boot_disk {
-    initialize_params {
-      image = "debian-cloud/debian-12"
-    }
-  }
+# Firewall module
+module "firewall" {
+  source             = "./modules/firewall"
+  network_id         = module.network.network_id
+  allowed_ssh_port   = var.allowed_ssh_port
+  allowed_ssh_cidr   = var.allowed_ssh_cidr
+  blocked_http_cidr  = var.blocked_http_cidr
+  allowed_http_cidr  = var.allowed_http_cidr
+}
 
-  attached_disk {
-    source = google_compute_disk.elk_data_disk.id
-    mode   = "READ_WRITE"
-  }
+# Compute module
+module "compute" {
+  source                   = "./modules/compute"
+  portfolio_vm_name        = var.app_vm_name
+  elk_vm_name              = var.elk_vm_name
+  vm_size                  = var.app_vm_size
+  zone                     = var.zone
+  network_id               = module.network.network_id
+  portfolio_static_ip      = module.network.portfolio_static_ip
+  elk_static_ip            = module.network.elk_static_ip
+  portfolio_data_disk_id   = module.storage.portfolio_data_disk_id
+  elk_data_disk_id         = module.storage.elk_data_disk_id
+}
 
-  network_interface {
-    network = google_compute_network.portfolio_network.id
-    access_config {
-      nat_ip = google_compute_address.elk_static_ip.address
-    }
-  }
-
-  tags = ["elk-vm"]
-
-  lifecycle {
-    ignore_changes = [
-      metadata["ssh-keys"]
-    ]
-  }
+# Cloudflare module
+module "cloudflare_rules" {
+  source  = "./modules/cloudflare"
+  zone_id = var.cloudflare_zone_id 
 }

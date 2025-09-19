@@ -22,6 +22,8 @@ jobs:
       TF_VAR_elk_vm_name: ${{ secrets.TF_VAR_ELK_VM_NAME }}
       TF_VAR_allowed_ssh_cidr: ${{ secrets.TF_VAR_ALLOWED_SSH_CIDR }}
       TF_VAR_allowed_ssh_port: ${{ secrets.TF_VAR_ALLOWED_SSH_PORT }}
+      TF_VAR_cloudflare_zone_id: ${{ secrets.TF_VAR_CLOUDFLARE_ZONE_ID }}
+      TF_VAR_cloudflare_api_token: ${{ secrets.TF_VAR_CLOUDFLARE_API_TOKEN }}
     
     steps:
       - name: Checkout repository
@@ -75,24 +77,24 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Setup SSH key
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.PORTFOLIO_VM_KEY_CI }}" > ~/.ssh/ansible
-          chmod 600 ~/.ssh/ansible
+     - name: Setup SSH key
+       run: |
+         mkdir -p ~/.ssh
+         echo "${{ secrets.PORTFOLIO_VM_KEY_CI }}" > ~/.ssh/ansible
+         chmod 600 ~/.ssh/ansible
 
-      - name: Add VM to known_hosts
-        run: |
-          ssh-keyscan -p ${{ secrets.ANSIBLE_PORT_SSH }} -H ${{ secrets.PORTFOLIO_VM_IP }} >> ~/.ssh/known_hosts
-          ssh-keyscan -p ${{ secrets.ANSIBLE_PORT_SSH }} -H ${{ secrets.ELK_VM_IP }} >> ~/.ssh/known_hosts
+     - name: Add VM to known_hosts
+       run: |
+         ssh-keyscan -p ${{ secrets.ANSIBLE_PORT_SSH }} -H ${{ secrets.PORTFOLIO_VM_IP }} >> ~/.ssh/known_hosts
+         ssh-keyscan -p ${{ secrets.ANSIBLE_PORT_SSH }} -H ${{ secrets.ELK_VM_IP }} >> ~/.ssh/known_hosts
 
-      - name: Install Ansible
-        run: sudo apt-get update && sudo apt-get install -y ansible
+     - name: Install Ansible
+       run: sudo apt-get update && sudo apt-get install -y ansible
 
-      - name: Run Ansible Playbook
-        run: |
-          ansible-playbook -i ansible/inventory.yaml ansible/playbook.yaml \
-           --vault-password-file=<(echo "$ANSIBLE_VAULT_PASSWORD")
+     - name: Run Ansible Playbook
+       run: |
+         ansible-playbook -i ansible/inventory.yaml ansible/playbook.yaml \
+          --vault-password-file=<(echo "$ANSIBLE_VAULT_PASSWORD")
 
   application_healthcheck:
       name: Run healthcheck

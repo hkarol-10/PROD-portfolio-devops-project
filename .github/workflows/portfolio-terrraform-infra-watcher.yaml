@@ -16,6 +16,8 @@ jobs:
       TF_VAR_elk_vm_name: ${{ secrets.TF_VAR_ELK_VM_NAME }}
       TF_VAR_allowed_ssh_cidr: ${{ secrets.TF_VAR_ALLOWED_SSH_CIDR }}
       TF_VAR_allowed_ssh_port: ${{ secrets.TF_VAR_ALLOWED_SSH_PORT }}
+      TF_VAR_cloudflare_zone_id: ${{ secrets.TF_VAR_CLOUDFLARE_ZONE_ID }}
+      TF_VAR_cloudflare_api_token: ${{ secrets.TF_VAR_CLOUDFLARE_API_TOKEN }}
     
     steps:
       - name: Checkout repository

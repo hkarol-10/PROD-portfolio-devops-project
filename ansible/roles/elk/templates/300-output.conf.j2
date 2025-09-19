@@ -1,0 +1,9 @@
+output {
+  elasticsearch {
+    hosts => ["http://elasticsearch:9200"]
+    index => "web-logs-%{+YYYY.MM.dd}"
+    template => "/usr/share/logstash/templates/web_template.json"
+    template_name => "web-logs"
+    template_overwrite => true
+  }
+}

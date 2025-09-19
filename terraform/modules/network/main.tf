@@ -8,13 +8,13 @@ resource "google_compute_network" "portfolio_network" {
   auto_create_subnetworks = true
 }
 
-# Static IP
+# Static IP for Portfolio VM
 resource "google_compute_address" "portfolio_static_ip" {
   name   = "portfolio-static-ip"
   region = var.region
 }
 
-# Static IP
+# Static IP for ELK VM
 resource "google_compute_address" "elk_static_ip" {
   name   = "elk-static-ip"
   region = var.region
