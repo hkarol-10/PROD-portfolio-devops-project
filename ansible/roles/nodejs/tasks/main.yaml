@@ -1,5 +1,0 @@
----
-# Entry point for the node role.
-
-# 1. Deploy node files
-- import_tasks: deploy.yaml

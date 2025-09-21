@@ -1,5 +1,4 @@
 # application config
-application_home_dir:                "{{ project_home_dir }}/app"
 application_logs_dir:                "{{ logs_home }}/node"
 application_logrotate_frequency:     "daily"
 application_logrotate_rotate:        14
@@ -14,4 +13,8 @@ nginx_basic_auth:                    False
 rate_limit_requests_per_seconds:     "5r/s"
 
 # docker config
-docker_compose_template: "docker-compose-nginx-nodeJS.yml.j2"
+docker_compose_template:             "docker-compose-nginx-nodeJS.yml.j2"
+use_custom_docker_registry:          True
+github_user:                         "hkarol-10"
+github_token:                        "{{ lookup('env','GHCR_TOKEN') }}"
+portfolio_application_image:         "ghcr.io/{{ github_user }}/portfolio-app:latest"

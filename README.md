@@ -1,19 +1,27 @@
 # Portfolio DevOps Project
 
-| GitHub Action                  | Status |
-|-------------------------------|-------|
-| Deployment     | [![Portfolio CI/CD](https://github.com/hkarol-10/PROD-portfolio-devops-project/actions/workflows/portfolio-cicd.yaml/badge.svg)](https://github.com/hkarol-10/PROD-portfolio-devops-project/actions/workflows/portfolio-cicd.yaml) |
-| VMs online/offline schedule | [![VM Schedule](https://github.com/hkarol-10/PROD-portfolio-devops-project/actions/workflows/portfolio-vm-auto.yaml/badge.svg)](https://github.com/hkarol-10/PROD-portfolio-devops-project/actions/workflows/portfolio-vm-auto.yaml) |
-| Terraform tfstate watcher | [![Infra watcher](https://github.com/hkarol-10/PROD-portfolio-devops-project/actions/workflows/portfolio-terrraform-infra-watcher.yaml/badge.svg)](https://github.com/hkarol-10/PROD-portfolio-devops-project/actions/workflows/portfolio-terrraform-infra-watcher.yaml) |
+This project is a personal DevOps portfolio repository. This repository is public for demonstration and inspiration purposes. <br>
+It was created as an after-hours side-project to showcase infrastructure, tooling and CI/CD patterns for a personal portfolio. <br>
+No real credentials, private keys, hostnames, ports or IP addresses are included. <br>
 
 
-This project is a personal DevOps portfolio setup using the stack below:
+### GitHub Actions workflows 
+| GitHub Action                  | Status | Function |
+|-------------------------------|-------| -----|
+| Deployment     | [![Portfolio CI/CD](https://github.com/hkarol-10/PROD-portfolio-devops-project/actions/workflows/portfolio-cicd.yaml/badge.svg)](https://github.com/hkarol-10/PROD-portfolio-devops-project/actions/workflows/portfolio-cicd.yaml) | Build & provisioning |
+| VMs online/offline schedule | [![VM Schedule](https://github.com/hkarol-10/PROD-portfolio-devops-project/actions/workflows/portfolio-vm-auto.yaml/badge.svg)](https://github.com/hkarol-10/PROD-portfolio-devops-project/actions/workflows/portfolio-vm-auto.yaml) | Cost optymalization |
+| Terraform tfstate watcher | [![Infra watcher](https://github.com/hkarol-10/PROD-portfolio-devops-project/actions/workflows/portfolio-terrraform-infra-watcher.yaml/badge.svg)](https://github.com/hkarol-10/PROD-portfolio-devops-project/actions/workflows/portfolio-terrraform-infra-watcher.yaml)| Drift detection |
+| Vulnerability scanner | portfolio-vulnerability-scan.yaml - disabled on public repo due to security reasons but working fine on the private | Security |
+
+
+
+### Setup using the stack below
 
 | Category                     | Tools / Technology |
 |-------------------------------|------------------|
 | **CI/CD**                     | GitHub Actions |
 | **Infrastructure as Code**    | Terraform & Ansible |
-| **Containerization**          | Docker |
+| **Containerization and build** | Docker |
 | **Web / API**                 | NGINX |
 | **Cloud**                     | Google Cloud Platform |
 | **Central Monitoring**        | ELK Stack + Beats |
@@ -63,17 +71,19 @@ CI/CD flow diagram:
 ```mermaid
 flowchart TD
     A[Push to main branch] --> B[Run Terraform apply]
-    B --> C[Run Ansible Playbooks]
-    C --> D[Run Healthcheck Script]
-    D -->|Success| E[Deployment OK]
-    D -->|Failure| F[Notify me via e-mail]
+    B --> C[Build and push Docker image to GHCR]
+    C --> D[Run Ansible Playbooks]
+    D --> E[Run Healthcheck Script]
+    E -->|Success| F[Deployment OK]
+    E -->|Failure| G[Notify me via e-mail]
 
     style A fill:#cce5ff,stroke:#333,stroke-width:1px,color:#000
     style B fill:#cce5ff,stroke:#333,stroke-width:1px,color:#000
     style C fill:#cce5ff,stroke:#333,stroke-width:1px,color:#000
     style D fill:#cce5ff,stroke:#333,stroke-width:1px,color:#000
-    style E fill:#9fdf9f,stroke:#333,stroke-width:1px,color:#000
-    style F fill:#f5a3a3,stroke:#333,stroke-width:1px,color:#000
+    style E fill:#cce5ff,stroke:#333,stroke-width:1px,color:#000
+    style F fill:#9fdf9f,stroke:#333,stroke-width:1px,color:#000
+    style G fill:#f5a3a3,stroke:#333,stroke-width:1px,color:#000
 ```
 
 The project includes a **GitHub Actions workflow** that can:
