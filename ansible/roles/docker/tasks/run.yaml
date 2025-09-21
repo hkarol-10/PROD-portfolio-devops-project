@@ -1,5 +1,4 @@
----
 - name: Start Docker Compose in detached mode
-  shell: docker-compose -f {{ docker_compose_file }} up -d
+  shell: docker-compose -f {{ docker_compose_file }} up -d --force-recreate
   args:
     chdir: "{{ docker_home }}"

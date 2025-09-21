@@ -4,11 +4,6 @@
   roles:
     - bootstrap
   tasks:
-    - name: Run nodejs on portfolio_vm
-      import_role:
-        name: nodejs
-      when: inventory_hostname == "portfolio_vm"
-
     - name: Run nginx on all
       import_role:
         name: nginx

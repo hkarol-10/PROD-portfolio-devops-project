@@ -2,14 +2,14 @@ version: "3.8"
 
 services:
   nodeapp1:
-    build: {{ application_home_dir }}
+    image: "{{ portfolio_application_image }}"
     container_name: nodeapp1
     ports:
       - "3000:3000"
     restart: unless-stopped
 
   nodeapp2:
-    build: {{ application_home_dir }}
+    image: "{{ portfolio_application_image }}"
     container_name: nodeapp2
     ports:
       - "3001:3000"

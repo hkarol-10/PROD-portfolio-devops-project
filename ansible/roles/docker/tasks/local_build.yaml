@@ -1,0 +1,19 @@
+- name: Log in to GHCR (local build)
+  community.docker.docker_login:
+    registry_url: ghcr.io
+    username: "{{ github_user }}"
+    password: "{{ github_token }}"
+  delegate_to: localhost
+  run_once: true
+
+- name: Build Node.js app image locally and push to GHCR
+  community.docker.docker_image:
+    name: ghcr.io/hkarol-10/portfolio-app
+    tag: latest
+    build:
+      path: ../nodeApp
+      dockerfile: Dockerfile
+    push: true
+    source: build
+  delegate_to: localhost
+  run_once: true

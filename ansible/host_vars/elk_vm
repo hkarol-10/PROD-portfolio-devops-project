@@ -11,4 +11,3 @@ nginx_basic_auth:            True #allways True due xpack.security.enabled=false
 
 # Docker conf
 docker_compose_template:     "docker-compose-nginx-elk.yml.j2"
-

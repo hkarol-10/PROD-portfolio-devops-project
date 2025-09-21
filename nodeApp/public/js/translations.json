@@ -51,7 +51,7 @@
     "sectionWeb": "Technologie Web/API i bazy danych",
     "sectionMonitoring": "Monitoring i obserwacja",
     "sectionVC": "Kontrola wersji i współpraca zespołowa",
-    "sectionOther": "Pozostałe narzędzia",
+    "sectionOther": "Inne narzędzia",
     "infrastructureHeader": "Infrastruktura",
     "infrastructureDesc": "W tej sekcji znajdziesz szczegółowy opis infrastruktury użytej do stworzenia tej strony, wraz z narzędziami i technologiami, które zostały zastosowane podczas jej budowy.",
     "infrastructureRepo": "Możesz także sprawdzić kod i narzędzia jakimi posłużyłem się do stworzenia tego projektu:",

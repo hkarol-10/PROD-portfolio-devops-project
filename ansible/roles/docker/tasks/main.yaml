@@ -2,13 +2,21 @@
 # Entry point for the docker role.
 
 # 1. Deploy docker files
-- import_tasks: deploy.yaml
+- import_tasks: prepare.yaml
 
-# 2. build
-- import_tasks: build.yaml
+# 2. Login to GHCR
+- import_tasks: ghcr-login.yaml
+  when: use_custom_docker_registry | default(false)
 
-# 3. start
-- import_tasks: start.yaml
+# 3. Build image (locally without ci/cd if needed)
+- import_tasks: local_build.yaml
+  when: local_build | default(false)
 
-# 4. prune old images
+# 4. pull latest images
+- import_tasks: pull.yaml
+
+# 5. Run containers 
+- import_tasks: run.yaml
+
+# 6. prune old images
 - import_tasks: prune.yaml

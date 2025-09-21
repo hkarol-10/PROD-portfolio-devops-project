@@ -1,0 +1,5 @@
+---
+- name: Pull latest images
+  shell: docker-compose -f {{ docker_compose_file }} pull
+  args:
+    chdir: "{{ docker_home }}"

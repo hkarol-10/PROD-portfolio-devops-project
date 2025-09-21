@@ -6,6 +6,7 @@
 
 # 2. Install required repos
 - import_tasks: add_apt_repos.yaml
+  when: inventory_hostname  == "elk_vm"
 
 # 3. Ensure required tools are installed
 - import_tasks: tools.yaml

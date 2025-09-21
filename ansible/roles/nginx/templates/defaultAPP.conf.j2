@@ -32,15 +32,19 @@ server {
     add_header X-Frame-Options "SAMEORIGIN";
     add_header X-XSS-Protection "1; mode=block";
     add_header X-Content-Type-Options "nosniff";
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
 
     # Redirect /tag=anything → /index.html
     location ~ ^/tag= {
-    return 301 /index.html;
+        return 301 /index.html;
     }
-    
-    # Redirect root "/" to /index.html
+
+    # Allow /?tag=value → /index.html?tag=value
     location = / {
-        return 301 /index.html?$args;
+        if ($arg_tag != "") {
+            return 301 /index.html?tag=$arg_tag;
+        }
+        return 301 /index.html;
     }
 
     # Whitelist pages
@@ -83,5 +87,13 @@ server {
     # Everything else → 403
     location / {
         return 403;
+    }
+
+    error_page 403 /custom_403.html;
+
+    location = /custom_403.html {
+        internal;
+        default_type text/plain;
+        return 403 "Jak mawial Zoltan: nie wpuszcza cie tu nawet za beczke piwa!";
     }
 }
