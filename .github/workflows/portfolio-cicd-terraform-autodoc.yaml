@@ -1,0 +1,26 @@
+name: Terraform Auto Documentation
+
+on:
+  schedule:
+    - cron: '0 4 * * *'  # 06:00 Poland (CEST), 05:00 Poland (CET)
+  workflow_dispatch:
+
+jobs:
+  generate-docs:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Generate Terraform docs
+        uses: terraform-docs/gh-actions@v1.4.1
+        with:
+          working-dir: terraform
+          output-file: README_terraform.md 
+          output-method: inject
+          git-push: true
+          fail-on-diff: false
+          git-push-user-name: github-actions[bot]
+          git-push-user-email: github-actions[bot]@users.noreply.github.com

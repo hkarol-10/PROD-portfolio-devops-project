@@ -6,14 +6,12 @@
   delegate_to: localhost
   run_once: true
 
-- name: Build Node.js app image locally and push to GHCR
-  community.docker.docker_image:
-    name: ghcr.io/hkarol-10/portfolio-app
-    tag: latest
-    build:
-      path: ../nodeApp
-      dockerfile: Dockerfile
-    push: true
-    source: build
+- name: Build Node.js app image locally
+  ansible.builtin.shell: docker build -t ghcr.io/hkarol-10/portfolio-app:latest ../nodeApp
+  delegate_to: localhost
+  run_once: true
+
+- name: Push Node.js app image to GHCR
+  ansible.builtin.shell: docker push ghcr.io/hkarol-10/portfolio-app:latest
   delegate_to: localhost
   run_once: true
