@@ -1,141 +1,141 @@
 name: Portfolio deployment
 
-#on:
-#  push:
-#    branches:
-#      - main
-#  workflow_dispatch:
-#
-#concurrency:
-#  group: portfolio-deploy
-#  cancel-in-progress: false
-#
-#jobs:
-#  terraform_apply:
-#    name: Terraform apply
-#    runs-on: ubuntu-latest
-#    env:
-#      TF_VAR_project_id: ${{ secrets.TF_VAR_PROJECT_ID }}
-#      TF_VAR_region: ${{ secrets.TF_VAR_REGION }}
-#      TF_VAR_zone: ${{ secrets.TF_VAR_ZONE }}
-#      TF_VAR_app_vm_name: ${{ secrets.TF_VAR_APP_VM_NAME }}
-#      TF_VAR_elk_vm_name: ${{ secrets.TF_VAR_ELK_VM_NAME }}
-#      TF_VAR_allowed_ssh_cidr: ${{ secrets.TF_VAR_ALLOWED_SSH_CIDR }}
-#      TF_VAR_allowed_ssh_port: ${{ secrets.TF_VAR_ALLOWED_SSH_PORT }}
-#      TF_VAR_cloudflare_zone_id: ${{ secrets.TF_VAR_CLOUDFLARE_ZONE_ID }}
-#      TF_VAR_cloudflare_api_token: ${{ secrets.TF_VAR_CLOUDFLARE_API_TOKEN }}
-#    
-#    steps:
-#      - name: Checkout repository
-#        uses: actions/checkout@v3
-#
-#      - name: Setup Terraform
-#        uses: hashicorp/setup-terraform@v2
-#        with:
-#          terraform_version: 1.9.0
-#
-#      - name: Authenticate to GCP
-#        uses: google-github-actions/auth@v1
-#        with:
-#          credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
-#
-#      - name: Terraform Init
-#        run: terraform -chdir=terraform init
-#
-#      # Below block is created in this way to capture the output and protect it from being printed in logs
-#      # I do not wanna to share the full terraform apply output in the logs due to security reasons (public repo)    
-#      - name: Terraform Apply
-#        run: |
-#          set -o pipefail
-#          terraform -chdir=terraform apply -auto-approve -no-color > apply.log 2>&1
-#          status=$?
-#          if [ $status -eq 0 ]; then
-#            echo "Terraform apply succeeded!"
-#          else
-#            echo "Terraform apply failed"
-#            exit $status
-#          fi
-#          rm -f apply.log
-#
-#  build_app_image:
-#    name: Build and push Docker image
-#    needs: terraform_apply
-#    runs-on: ubuntu-latest
-#
-#    permissions:
-#      packages: write
-#      contents: read
-#
-#    steps:
-#      - name: Checkout repo
-#        uses: actions/checkout@v3
-#
-#      - name: Log in to GitHub Container Registry
-#        uses: docker/login-action@v3
-#        with:
-#          registry: ghcr.io
-#          username: ${{ github.actor }}
-#          password: ${{ secrets.GHCR_TOKEN }}
-#
-#      - name: Build and push Docker image
-#        uses: docker/build-push-action@v6
-#        with:
-#          context: ./nodeApp
-#          push: true
-#          tags: ghcr.io/${{ github.repository_owner }}/portfolio-app:latest
-#
-#
-#  ansible_deploy:
-#    name: Ansible Deploy
-#    needs: build_app_image
-#    runs-on: ubuntu-latest
-#    env:
-#          PORTFOLIO_VM_IP:            ${{ secrets.PORTFOLIO_VM_IP }}
-#          ELK_VM_IP:                  ${{ secrets.ELK_VM_IP }}
-#          ANSIBLE_PORT_SSH:           ${{ secrets.ANSIBLE_PORT_SSH }}
-#          PORTFOLIO_VM_ANSIBLE_USER:  ${{ secrets.PORTFOLIO_VM_ANSIBLE_USER }}
-#          PORTFOLIO_DOMAIN_PATHS:     ${{ secrets.PORTFOLIO_DOMAIN_PATHS }}
-#          POTFOLIO_VM_KEY_PATH:       ${{ secrets.POTFOLIO_VM_KEY_PATH }}
-#          ANSIBLE_VAULT_PASSWORD:     ${{ secrets.ANSIBLE_VAULT_PASS }}
-#          KIBANA_VERSION:             ${{ secrets.KIBANA_VERSION }}
-#          LOGSTASH_VERSION:           ${{ secrets.LOGSTASH_VERSION }}
-#          NGINX_VERSION:              ${{ secrets.NGINX_VERSION }}
-#          FILEBEAT_VERSION:           ${{ secrets.FILEBEAT_VERSION }}
-#          ELASTICSEARCH_VERSION:      ${{ secrets.ELASTICSEARCH_VERSION }}
-#          GHCR_TOKEN:                 ${{ secrets.GHCR_TOKEN }}
-#
-#    steps:
-#      - name: Checkout repository
-#        uses: actions/checkout@v3
-#
-#      - name: Setup SSH key
-#        run: |
-#          mkdir -p ~/.ssh
-#          echo "${{ secrets.PORTFOLIO_VM_KEY_CI }}" > ~/.ssh/ansible
-#          chmod 600 ~/.ssh/ansible
-#      - name: Add VM to known_hosts
-#        run: |
-#          ssh-keyscan -p ${{ secrets.ANSIBLE_PORT_SSH }} -H ${{ secrets.PORTFOLIO_VM_IP }} >> ~/.ssh/known_hosts
-#          ssh-keyscan -p ${{ secrets.ANSIBLE_PORT_SSH }} -H ${{ secrets.ELK_VM_IP }} >> ~/.ssh/known_hosts
-#      - name: Install Ansible
-#        run: sudo apt-get update && sudo apt-get install -y ansible
-#
-#      - name: Run Ansible Playbook
-#        run: |
-#         ansible-playbook -i ansible/inventory.yaml ansible/playbook.yaml \
-#          --vault-password-file=<(echo "$ANSIBLE_VAULT_PASSWORD")
-#  application_healthcheck:
-#      name: Run healthcheck
-#      needs: ansible_deploy
-#      runs-on: ubuntu-latest
-#  
-#      steps:
-#        - name: Checkout repository
-#          uses: actions/checkout@v3
-#  
-#        - name: Healthcheck service
-#          run: |
-#            chmod +x .github/scripts/healthcheck.sh
-#            .github/scripts/healthcheck.sh
-#          env:
-#            PORTFOLIO_API_HEALTHCHECK: ${{ secrets.PORTFOLIO_API_HEALTHCHECK }}
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: portfolio-deploy
+  cancel-in-progress: false
+
+jobs:
+  terraform_apply:
+    name: Terraform apply
+    runs-on: ubuntu-latest
+    env:
+      TF_VAR_project_id: ${{ secrets.TF_VAR_PROJECT_ID }}
+      TF_VAR_region: ${{ secrets.TF_VAR_REGION }}
+      TF_VAR_zone: ${{ secrets.TF_VAR_ZONE }}
+      TF_VAR_app_vm_name: ${{ secrets.TF_VAR_APP_VM_NAME }}
+      TF_VAR_elk_vm_name: ${{ secrets.TF_VAR_ELK_VM_NAME }}
+      TF_VAR_allowed_ssh_cidr: ${{ secrets.TF_VAR_ALLOWED_SSH_CIDR }}
+      TF_VAR_allowed_ssh_port: ${{ secrets.TF_VAR_ALLOWED_SSH_PORT }}
+      TF_VAR_cloudflare_zone_id: ${{ secrets.TF_VAR_CLOUDFLARE_ZONE_ID }}
+      TF_VAR_cloudflare_api_token: ${{ secrets.TF_VAR_CLOUDFLARE_API_TOKEN }}
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.9.0
+
+      - name: Authenticate to GCP
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+
+      - name: Terraform Init
+        run: terraform -chdir=terraform init
+
+      # Below block is created in this way to capture the output and protect it from being printed in logs
+      # I do not wanna to share the full terraform apply output in the logs due to security reasons (public repo)    
+      - name: Terraform Apply
+        run: |
+          set -o pipefail
+          terraform -chdir=terraform apply -auto-approve -no-color > apply.log 2>&1
+          status=$?
+          if [ $status -eq 0 ]; then
+            echo "Terraform apply succeeded!"
+          else
+            echo "Terraform apply failed"
+            exit $status
+          fi
+          rm -f apply.log
+
+  build_app_image:
+    name: Build and push Docker image
+    needs: terraform_apply
+    runs-on: ubuntu-latest
+
+    permissions:
+      packages: write
+      contents: read
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GHCR_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./nodeApp
+          push: true
+          tags: ghcr.io/${{ github.repository_owner }}/portfolio-app:latest
+
+
+  ansible_deploy:
+    name: Ansible Deploy
+    needs: build_app_image
+    runs-on: ubuntu-latest
+    env:
+          PORTFOLIO_VM_IP:            ${{ secrets.PORTFOLIO_VM_IP }}
+          ELK_VM_IP:                  ${{ secrets.ELK_VM_IP }}
+          ANSIBLE_PORT_SSH:           ${{ secrets.ANSIBLE_PORT_SSH }}
+          PORTFOLIO_VM_ANSIBLE_USER:  ${{ secrets.PORTFOLIO_VM_ANSIBLE_USER }}
+          PORTFOLIO_DOMAIN_PATHS:     ${{ secrets.PORTFOLIO_DOMAIN_PATHS }}
+          POTFOLIO_VM_KEY_PATH:       ${{ secrets.POTFOLIO_VM_KEY_PATH }}
+          ANSIBLE_VAULT_PASSWORD:     ${{ secrets.ANSIBLE_VAULT_PASS }}
+          KIBANA_VERSION:             ${{ secrets.KIBANA_VERSION }}
+          LOGSTASH_VERSION:           ${{ secrets.LOGSTASH_VERSION }}
+          NGINX_VERSION:              ${{ secrets.NGINX_VERSION }}
+          FILEBEAT_VERSION:           ${{ secrets.FILEBEAT_VERSION }}
+          ELASTICSEARCH_VERSION:      ${{ secrets.ELASTICSEARCH_VERSION }}
+          GHCR_TOKEN:                 ${{ secrets.GHCR_TOKEN }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.PORTFOLIO_VM_KEY_CI }}" > ~/.ssh/ansible
+          chmod 600 ~/.ssh/ansible
+      - name: Add VM to known_hosts
+        run: |
+          ssh-keyscan -p ${{ secrets.ANSIBLE_PORT_SSH }} -H ${{ secrets.PORTFOLIO_VM_IP }} >> ~/.ssh/known_hosts
+          ssh-keyscan -p ${{ secrets.ANSIBLE_PORT_SSH }} -H ${{ secrets.ELK_VM_IP }} >> ~/.ssh/known_hosts
+      - name: Install Ansible
+        run: sudo apt-get update && sudo apt-get install -y ansible
+
+      - name: Run Ansible Playbook
+        run: |
+         ansible-playbook -i ansible/inventory.yaml ansible/playbook.yaml \
+          --vault-password-file=<(echo "$ANSIBLE_VAULT_PASSWORD")
+  application_healthcheck:
+      name: Run healthcheck
+      needs: ansible_deploy
+      runs-on: ubuntu-latest
+  
+      steps:
+        - name: Checkout repository
+          uses: actions/checkout@v3
+  
+        - name: Healthcheck service
+          run: |
+            chmod +x .github/scripts/healthcheck.sh
+            .github/scripts/healthcheck.sh
+          env:
+            PORTFOLIO_API_HEALTHCHECK: ${{ secrets.PORTFOLIO_API_HEALTHCHECK }}
