@@ -42,6 +42,8 @@ jobs:
       - name: Terraform Init
         run: terraform -chdir=terraform init
 
+      # Below block is created in this way to capture the output and protect it from being printed in logs
+      # I do not wanna to share the full terraform apply output in the logs due to security reasons (public repo)    
       - name: Terraform Apply
         run: |
           set -o pipefail

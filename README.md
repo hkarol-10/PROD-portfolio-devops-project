@@ -1,8 +1,6 @@
 # Portfolio DevOps Project
 
-This project is a personal DevOps portfolio repository. This repository is public for demonstration and inspiration purposes. <br>
-It was created as an after-hours side-project to showcase infrastructure, tooling and CI/CD patterns for a personal portfolio. <br>
-No real credentials, private keys, hostnames, ports or IP addresses are included. <br>
+This project is a personal DevOps portfolio repository. This repository is public for demonstration and inspiration purposes. It was created as an after-hours side-project to showcase infrastructure, tooling and CI/CD patterns for a personal portfolio.No real credentials, private keys, hostnames, ports or IP addresses are included.
 
 
 ### GitHub Actions workflows 
@@ -11,7 +9,8 @@ No real credentials, private keys, hostnames, ports or IP addresses are included
 | Deployment     | [![Portfolio CI/CD](https://github.com/hkarol-10/PROD-portfolio-devops-project/actions/workflows/portfolio-cicd.yaml/badge.svg)](https://github.com/hkarol-10/PROD-portfolio-devops-project/actions/workflows/portfolio-cicd.yaml) | Build & provisioning |
 | VMs online/offline schedule | [![VM Schedule](https://github.com/hkarol-10/PROD-portfolio-devops-project/actions/workflows/portfolio-vm-auto.yaml/badge.svg)](https://github.com/hkarol-10/PROD-portfolio-devops-project/actions/workflows/portfolio-vm-auto.yaml) | Cost optymalization |
 | Terraform tfstate watcher | [![Infra watcher](https://github.com/hkarol-10/PROD-portfolio-devops-project/actions/workflows/portfolio-terrraform-infra-watcher.yaml/badge.svg)](https://github.com/hkarol-10/PROD-portfolio-devops-project/actions/workflows/portfolio-terrraform-infra-watcher.yaml)| Drift detection |
-| Vulnerability scanner | portfolio-vulnerability-scan.yaml - disabled on public repo due to security reasons but working fine on the private | Security |
+| Terraform auto documentation | [![Terraform doc](https://github.com/hkarol-10/PROD-portfolio-devops-project/actions/workflows/portfolio-cicd-terraform-autodoc.yamlbadge.svg)](https://github.com/hkarol-10/PROD-portfolio-devops-project/actions/workflows/portfolio-cicd-terraform-autodoc.yaml)| Documentation|
+| Vulnerability scanner | [portfolio-vulnerability-scan.yaml](.github\workflows\portfolio-vulnerability-scan.yaml) - disabled on public repo due to security reasons but working fine on the private | Security |
 
 
 
@@ -27,7 +26,7 @@ No real credentials, private keys, hostnames, ports or IP addresses are included
 | **Central Monitoring**        | ELK Stack + Beats |
 | **Operating System**          | Linux Debian |
 | **Scripting**                 | Custom bash scripts |
-| **Security**                  | Firewall rules, HTTPS / SSL, Cloudflare WAF, logrotate |
+| **Security**                  | Firewall rules, HTTPS / SSL, Cloudflare WAF, Trivy, logrotate |
 
 
 It automates the following processes:
@@ -88,27 +87,44 @@ flowchart TD
 
 The project includes a **GitHub Actions workflow** that can:
 
+**Deplyoment GH Action**
 [portfolio-cicd.yaml](.github/workflows/portfolio-cicd.yaml)
   1. Run Terraform apply to build infrastracture
-  2. Run Ansible playbooks to deploy the applications 
+  2. Build image and push it to GitHub Container Registry
+  3. Run Ansible playbooks to deploy the applications 
   3. Run [healthcheck.sh](.github/scripts/healthcheck.sh) to check the deployment result 
 
-Additional ci/cd features:
-  1. Auto manged VM schedule - turn off VMs at 1:00 and turn on 7:00 for cost optimization [portfolio-terraform-infra-watcher.yaml](.github/workflows/portfolio-terraform-infra-watcher.yaml)
-  2. Terraform infra watcher - scheduled run to check if infrastracture meets the tf.state or needs to be updated [portfolio-vm-auto.yaml](.github/workflows/portfolio-vm-auto.yaml)
+Additional CI/CD Features
+1. **Auto-managed VM Schedule**  
+   Automatically turns off VMs at 01:00 and turns them on at 07:00 for cost optimization.  
+   Workflow: [portfolio-terraform-infra-watcher.yaml](.github/workflows/portfolio-terraform-infra-watcher.yaml)
 
+2. **Terraform Infrastructure Watcher**  
+   Scheduled runs to check whether the infrastructure matches the Terraform state or needs updates.  
+   Workflow: [portfolio-vm-auto.yaml](.github/workflows/portfolio-vm-auto.yaml)
 
-todo (work-in-progress):
-- Terraform auto-documentation by terraform markdown > **README.md**
+3. **Terraform Auto-Documentation**  
+   Automatically generates up-to-date Terraform documentation.  
+   Workflow: [portfolio-cicd-terraform-autodoc.yaml](.github/workflows/portfolio-cicd-terraform-autodoc.yaml)  
+   Documentation: [Terraform Docs](/terraform/README_terraform.md)
+
+4. **Image Vulnerability Scanning**  
+   Scans Docker images for vulnerabilities.  
+   Workflow: [portfolio-vulnerability-scan.yaml](.github/workflows/portfolio-vulnerability-scan.yaml)
+
 
 ## Features
 
-- Infrastructure as code (IaC) using Terraform -> tfstate is versioned and proctected in GoogleCloudBucket, available to cicd
+- Infrastructure as code (IaC) using Terraform – tfstate is versioned and protected in Google Cloud Bucket, available to CI/CD.
 - Node.js application served via NGINX.
-- Automatic HTTPS setup 
-- Centralized log observability in Kibana.
-- GitHub Actions for automated deployments **portfolio-cicd.yaml**
-- terraform-docs markdown **README.md** (terraform-docs markdown ./ > README.md)
+- Automatic HTTPS setup.
+- Centralized log observability using ELK Stack:
+  - Logstash parses NGINX and application logs, extracts structured fields, and enriches them for easier filtering and analysis.
+  - Elasticsearch stores logs in indexes with a defined index lifecycle policy (created via Logstash pipelines), enabling automated retention and rotation of logs.
+  - Kibana provides dashboards and alerts, with automatic log rotation and visualization of structured data.
+- GitHub Actions for automated deployments (portfolio-cicd.yaml).
+- Terraform docs automatically generated in markdown (README.md) via terraform-docs.
+
 
 ## CI/CD Management
 

@@ -264,11 +264,12 @@ html.dark footer {
 }
 
 .carousel::-webkit-scrollbar {
-  height: 10px;
+  height: 12px;
+  background-color: rgba(128, 128, 128, 0.5)
 }
 
 .carousel::-webkit-scrollbar-thumb {
-  background-color: rgba(0,0,0,0.3);
+  background-color: rgba(128, 128, 128, 0.5);
   border-radius: 5px;
 }
 
