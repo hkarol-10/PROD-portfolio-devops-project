@@ -50,6 +50,16 @@ header {
   height: 35px;
 }
 
+.logo-text {
+  color: white;        
+  text-decoration: none; 
+  font-weight: bold;    
+}
+
+.logo-text:hover {
+  text-decoration: underline; 
+}
+
 /* ====================
    Navigation
 ==================== */
@@ -62,7 +72,7 @@ nav a {
   transition: color 0.3s;
 }
 
-nav a:hover { color: #ff9800; }
+nav a:hover { color: #00aeff; }
 
 /* ====================
    Switches
@@ -135,14 +145,14 @@ p { font-size: 1.1rem; margin-bottom: 20px; line-height: 1.6; }
    DevOps
 ==================== */
 .devops-logo {
-  margin-top: 25px;
+  margin-top: 100px;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
 .devops-logo img {
-  width: 500px;
+  width: 800px;
   height: auto;
   filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.4));
   transition: filter 1s ease;
@@ -163,6 +173,7 @@ footer {
   background-color: #000000;
   text-align: center;
   color: #ffffff;
+  z-index: 100
 }
 
 .github-icon {
@@ -255,26 +266,32 @@ html.dark footer {
 /* ====================
    Footer
 ==================== */
-.carousel {
+/* ====================
+   Carousel
+==================== */
+.carousel-wrapper {
+  position: relative;
   display: flex;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.carousel {
   overflow-x: auto;
-  padding: 10px 0;
-  gap: 15px;
   scroll-behavior: smooth;
+  display: flex;
+  gap: 15px;
+  flex: 1;
+  padding: 10px 0;
 }
 
 .carousel::-webkit-scrollbar {
-  height: 12px;
-  background-color: rgba(128, 128, 128, 0.5)
+  height: 10px;
 }
 
 .carousel::-webkit-scrollbar-thumb {
   background-color: rgba(128, 128, 128, 0.5);
   border-radius: 5px;
-}
-
-html.dark .carousel::-webkit-scrollbar-thumb {
-  background-color: rgba(128, 128, 128, 0.5); 
 }
 
 .carousel-item {
@@ -302,6 +319,33 @@ html.dark .carousel::-webkit-scrollbar-thumb {
 .carousel-item p {
   font-size: 0.8rem;
   margin: 0;
+}
+
+/* ====================
+   Carousel Buttons
+==================== */
+.carousel-btn {
+  background-color: rgba(0,0,0,0.5);
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  padding: 5px 12px;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background 0.3s;
+  z-index: 10;
+}
+
+.carousel-btn:hover {
+  background-color: rgba(0,0,0,0.8);
+}
+
+.carousel-btn.prev {
+  margin-right: 10px;
+}
+
+.carousel-btn.next {
+  margin-left: 10px;
 }
 
 .tech-card {

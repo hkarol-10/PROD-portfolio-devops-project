@@ -56,10 +56,39 @@ jobs:
             exit $status
           fi
           rm -f apply.log
+  
+  test_changes:
+    name: Run tests
+    needs: terraform_apply
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: ./nodeApp
+
+      - name: Run tests
+        run: npm test
+        working-directory: ./nodeApp
+      
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: nodeApp/coverage/
+
 
   build_app_image:
     name: Build and push Docker image
-    needs: terraform_apply
+    needs: test_changes
     runs-on: ubuntu-latest
 
     permissions:

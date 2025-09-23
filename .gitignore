@@ -28,6 +28,15 @@ nodeApp/npm-debug.log
 nodeApp/yarn-error.log
 nodeApp/dist/
 nodeApp/.env
+nodeApp/dist/
+nodeApp/node_modules/
+nodeApp/dist/
+nodeApp/coverage/
+nodeApp/dist/
+nodeApp/.env
+nodeApp/dist/
+nodeApp/.DS_Store
+nodeApp/logs
 
 # -------------------------
 # Systems
