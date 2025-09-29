@@ -13,7 +13,7 @@
 
 # 4. Configure ssh 
 - import_tasks: ssh.yaml
-  when: lookup('env','ANSIBLE_PORT_SSH')
+  when: lookup('env','ANSIBLE_PORT_SSH') | length > 0
 
 # 5. Configure aliases and bashrc
 - import_tasks: bashrc.yaml
