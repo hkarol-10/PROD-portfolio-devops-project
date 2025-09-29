@@ -6,11 +6,26 @@
       register: disk_fs
       ignore_errors: yes
 
-    - name: Format the disk if it is not formatted
+    - name: Show disk formatting info
+      debug:
+        msg:
+          - "stdout: {{ disk_fs.stdout }}"
+          - "stdout_lines: {{ disk_fs.stdout_lines }}"
+          - "stderr: {{ disk_fs.stderr }}"
+
+    - name: Ask for confirmation before formatting disk
+      pause:
+        prompt: "Disk {{ data_disk_device }} appears unformatted. Do you want to format it? Type 'yes' to continue"
+      register: format_confirm
+      when: disk_fs.stdout == ""
+
+    - name: Format the disk if confirmed
       filesystem:
         fstype: ext4
         dev: "{{ data_disk_device }}"
-      when: disk_fs.stdout == ""
+      when:
+        - disk_fs.stdout == ""
+        - format_confirm.user_input == "yes"
 
     - name: Create mount point directory
       file:

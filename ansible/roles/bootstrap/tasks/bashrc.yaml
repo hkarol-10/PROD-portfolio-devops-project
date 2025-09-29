@@ -1,0 +1,9 @@
+- name: Add ansible managed aliases to .bashrc
+  blockinfile:
+    path: /home/{{ local_ansible_local_username }}/.bashrc
+    marker: "# {mark} ANSIBLE MANAGED BLOCK - ALIASES"
+    insertafter: EOF
+    block: |
+      alias home='cd /mnt/data'
+      alias gtl='cd /mnt/data/logs'
+      alias dckr='cd /mnt/data/docker'

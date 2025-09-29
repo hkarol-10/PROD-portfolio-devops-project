@@ -2,6 +2,10 @@
 elk_data_dir:               "{{ project_home_dir }}/elk_data"
 logstash_config_dir:        "{{ project_home_dir }}/logstash"
 logstash_config_templates:  "{{ logstash_config_dir }}/templates"
+elk_logs_dir:               "{{ logs_home }}/elk_logs"
+elasticsearch_logs_dir:     "{{ elk_logs_dir }}/elasticsearch_logs"
+kibana_logs_dir:            "{{ elk_logs_dir }}/kibana_logs"
+logstash_logs_dir:          "{{ elk_logs_dir }}/logstash_logs"  
 
 # NGINX conf
 nginx_conf_template:         "defaultELK.conf.j2"

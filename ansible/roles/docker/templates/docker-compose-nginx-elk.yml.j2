@@ -16,6 +16,7 @@ services:
         hard: -1
     volumes:
       - "{{ elk_data_dir }}:/usr/share/elasticsearch/data"
+      - "{{ elasticsearch_logs_dir }}:/usr/share/elasticsearch/logs"
     ports:
       - "9200:9200"
     deploy:
@@ -23,6 +24,11 @@ services:
         limits:
           cpus: "1.0"
           memory: 1.5g
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "3"
     restart: unless-stopped
 
   kibana:
@@ -32,11 +38,18 @@ services:
       - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
     depends_on:
       - elasticsearch
+    volumes:
+      - "{{ kibana_logs_dir }}:/usr/share/kibana/logs"
     deploy:
       resources:
         limits:
           cpus: "0.5"
           memory: 768m
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "3"
     restart: unless-stopped
 
   logstash:
@@ -45,6 +58,7 @@ services:
     volumes:
       - "{{ logstash_config_dir }}:/usr/share/logstash/pipeline:ro"
       - "{{ logstash_config_templates }}:/usr/share/logstash/templates:ro"
+      - "{{ logstash_logs_dir }}:/usr/share/logstash/logs"
     environment:
       - LS_JAVA_OPTS=-Xms1g -Xmx1g
     ports:
@@ -56,6 +70,11 @@ services:
         limits:
           cpus: "1.0"
           memory: 2g
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "3"
     restart: unless-stopped
 
   nginx:
@@ -77,6 +96,11 @@ services:
         limits:
           cpus: "0.2"
           memory: 256m
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "3"
     restart: unless-stopped
 
   filebeat:
@@ -93,4 +117,9 @@ services:
         limits:
           cpus: "0.2"
           memory: 256m
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "3"
     restart: unless-stopped

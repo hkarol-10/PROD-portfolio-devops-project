@@ -47,3 +47,9 @@ resource "google_compute_resource_policy" "daily_snapshot_policy" {
     }
   }
 }
+
+resource "google_compute_disk_resource_policy_attachment" "portfolio_data_disk_snapshot_policy" {
+  name = google_compute_resource_policy.daily_snapshot_policy.name
+  disk = google_compute_disk.portfolio_data_disk.name
+  zone = var.zone
+}

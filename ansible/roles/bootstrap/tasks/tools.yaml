@@ -51,16 +51,32 @@
               name: "{{ local_ansible_local_username }}"
               groups: docker
               append: yes
+
           - name: Ensure project directory exists with correct permissions
             file:
               path: "{{ project_home_dir }}"
               state: directory
               owner: "{{ local_ansible_local_username }}"
               mode: '0755'
+
           - name: Ensure ansible user has correct permissions on elk_data
             file:
               path: "{{ elk_data_dir }}"
               state: directory
               owner: "{{ local_ansible_local_username }}"
               mode: '0770'
+            when: inventory_hostname == "elk_vm"
+
+          - name: Ensure ELK log directories are in place with correct permissions
+            file:
+              path: "{{ item.path }}"
+              state: directory
+              owner: 1000
+              group: 1000
+              mode: "{{ item.mode | default('0770') }}"
+            loop:
+              - { path: "{{ elk_logs_dir }}" }
+              - { path: "{{ elasticsearch_logs_dir }}" }
+              - { path: "{{ kibana_logs_dir }}" }
+              - { path: "{{ logstash_logs_dir }}" }
             when: inventory_hostname == "elk_vm"

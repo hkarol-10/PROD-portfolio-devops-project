@@ -1,0 +1,29 @@
+name: Portfolio website check
+
+on:
+  schedule:
+    - cron: '0 8-20 * * *'   # every hour from 7:00 to 19:00 UTC (9:00 to 21:00 Poland CEST)
+  workflow_dispatch:
+
+jobs:
+  monitoring_tool_check:
+    name: Portfolio website check
+    runs-on: ubuntu-latest
+    env:
+      GHCR_TOKEN: ${{ secrets.GHCR_TOKEN }}
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+    permissions:
+      packages: read
+
+    steps:
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GHCR_TOKEN }}
+      
+      - name: Run monitoring tool container
+        run: |
+          docker run -e SLACK_WEBHOOK_URL=$SLACK_WEBHOOK_URL ghcr.io/${{ github.repository_owner }}/monitoring-tool:latest
