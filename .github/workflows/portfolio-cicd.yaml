@@ -146,8 +146,17 @@ jobs:
         run: |
           ssh-keyscan -p ${{ secrets.ANSIBLE_PORT_SSH }} -H ${{ secrets.PORTFOLIO_VM_IP }} >> ~/.ssh/known_hosts
           ssh-keyscan -p ${{ secrets.ANSIBLE_PORT_SSH }} -H ${{ secrets.ELK_VM_IP }} >> ~/.ssh/known_hosts
+      
       - name: Install Ansible
-        run: sudo apt-get update && sudo apt-get install -y ansible
+        run: |
+          python3 -m pip install --upgrade pip
+          pip install ansible-core==2.16.3
+      
+      - name: Install Ansible collections
+        run: ansible-galaxy install -r ansible/requirements.yml
+      
+      - name: Check ansible version
+        run: ansible --version
 
       - name: Run Ansible Playbook
         run: |
