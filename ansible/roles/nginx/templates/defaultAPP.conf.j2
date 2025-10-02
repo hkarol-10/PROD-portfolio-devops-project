@@ -48,7 +48,7 @@ server {
     }
 
     # Whitelist pages
-    location ~ ^/(index|experience|certifications|header|footer|infrastructure)\.html$ {
+    location ~ ^/(index|experience|certifications|header|footer|devops|gops)\.html$ {
         proxy_pass http://nodeapps;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;

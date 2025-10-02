@@ -438,3 +438,52 @@ a:hover {
   margin-bottom: 20px;
   border-radius: 4px;
 }
+
+.gitops-flow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 48px;
+  margin-top: 0;
+  background: #fff;
+  border-radius: 24px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  padding: 32px 24px;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.gitops-tile {
+  text-align: center;
+}
+
+.gitops-tile img {
+  height: 110px;
+}
+
+.gitops-tile div {
+  margin-top: 8px;
+  font-size: 1.2rem;
+}
+
+.gitops-flow > div[style*="font-size"] {
+  color: #222;
+  font-weight: bold;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.12);
+}
+
+.gitops-label {
+  margin-top: 8px;
+  font-size: 1.2rem;
+  color: #222;
+  font-weight: 500;
+}
+
+.gitops-arrow {
+  color: #222;
+  font-size: 3.5rem;
+  font-weight: bold;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.12);
+  margin: 0 8px;
+}

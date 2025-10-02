@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>K.H DevOps portfolio page</title>
+
+  <!-- Favicon (ikona zakładki) -->
+  <link rel="icon" href="images/favicon.png" type="image/png">
+
+  <!-- Wstępne ustawienie trybu, aby uniknąć migotania -->
+  <script>
+    (function() {
+      try {
+        const theme = localStorage.getItem("theme") || "dark";
+        document.documentElement.classList.add(theme);
+      } catch(e) {
+        console.error(e);
+      }
+    })();
+  </script>
+
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="header"></div>
+
+  <main>
+    <section class="gitops-section">
+      <h1 id="gitopsHeader" class="page-title" data-i18n="gitopsHeader">GitOps</h1>
+      <p id="gitopsDesc" data-i18n="gitopsDesc"></p>
+      <div id="gitopsNotice" class="security-notice">
+        <p id="gitopsDemo" data-i18n="gitopsDemo" style="font-size:1rem; margin:0;"></p>
+      </div>
+      <a href="https://github.com/hkarol-10/gitops-cloud-kubernetes" target="_blank" rel="noopener noreferrer">
+        <span id="gitopsRepo" data-i18n="gitopsRepo">GitOps Demo – Kubernetes Playground</span>
+      </a>
+
+      <div style="height: 48px;"></div>
+
+      <div class="gitops-flow">
+        <div class="gitops-tile">
+          <img src="https://git-scm.com/images/logos/downloads/Git-Icon-1788C.png" alt="Git">
+          <div class="gitops-label">Git</div>
+        </div>
+        <div class="gitops-arrow">&#8596;</div>
+        <div class="gitops-tile">
+          <img src="https://www.opsmx.com/wp-content/uploads/2022/07/Argo-1-e1630327305635-1.png" alt="ArgoCD">
+          <div class="gitops-label">ArgoCD</div>
+        </div>
+        <div class="gitops-arrow">&#8596;</div>
+        <div class="gitops-tile">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Kubernetes_logo_without_workmark.svg/1200px-Kubernetes_logo_without_workmark.svg.png" alt="Kubernetes">
+          <div class="gitops-label">Kubernetes</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="footer"></div>
+  <script src="js/main.js"></script>
+</body>
+</html>

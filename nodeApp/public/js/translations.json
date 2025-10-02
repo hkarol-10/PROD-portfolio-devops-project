@@ -7,8 +7,7 @@
     "certifications": "Certifications",
     "title": "Welcome to my page!👋",
     "description": "Here you will find information about me, my experience, and skills. 🚀",
-    "aboutText": "Experienced DevOps engineer with years of hands-on experience in automating CI/CD processes, deploying applications, and maintaining production environments. I have a comprehensive understanding of the software development lifecycle (SDLC), gained through work on projects using Agile/Scrum methodologies. I have practical experience with CI/CD tools such as Jenkins, Azure DevOps and cloud environment Azure & Openshift, which allows me to efficiently automate deployment processes, improve development team productivity, and ensure system stability. I quickly learn new technologies and tools, enabling me to adapt effectively to evolving project requirements.",
-    "certE12": "E.12. Assembly and operation of personal computers and external devices",
+    "aboutText": "Experienced DevOps Engineer with 9+ years in IT, including ~4 years in DevOps and Site Reliability roles. Hands-on in building and maintaining cloud-native environments (Azure, GCP, Kubernetes, OpenShift) with a strong focus on automation (Terraform, Helm, GitOps with ArgoCD) and CI/CD pipelines (GitHub Actions, Azure DevOps, Jenkins). Proven track record in deploying and operating containerized applications, optimizing reliability, and improving delivery speed. Skilled in monitoring and observability (Grafana, ELK) and troubleshooting complex distributed systems. Strong problem-solving mindset, combining platform engineering practices with application-level expertise.",
     "certE13": "E.13. Designing of local computer networks and network administration",
     "certE14": "E.14. Creation of web applications and databases and database administration",
     "certIT": "IT Technician",
@@ -22,12 +21,15 @@
     "sectionMonitoring": "Monitoring",
     "sectionVC": "Version Control & Collaboration",
     "sectionOther":"Other Tools",
-    "infrastructureHeader": "Infrastructure",
-    "infrastructureDesc": "Here you will find a detailed overview of the infrastructure used to build this site, including tools and technologies applied during its development.",
-    "infrastructureRepo": "You can also check out the code and patterns I used to build this website:",
+    "infrastructureHeader": "DevOps demo",
+    "infrastructureDesc": "This is a demo DevOps project showcasing a complete infrastructure setup for a personal portfolio site. The project demonstrates modern CI/CD automation, containerization, cloud integration, and monitoring concepts using real tools and technologies. All code, patterns, and configurations are provided for educational and inspiration purposes.",
+    "infrastructureRepo": "Explore the codebase and infrastructure patterns used in this demo project:",
     "securityNoticeTitle": "Security Notice:",
-    "securityNoticeText": "This repository is public for demonstration and inspiration purposes. It was created as an after-hours side-project to showcase infrastructure, tooling and CI/CD patterns for a personal portfolio. No real credentials, private keys, hostnames, ports or IP addresses are included. All credentials and secrets must be provided via GitHub Actions Secrets or environment variables — without them the resources will not be reachable or operational. DO NOT attempt to connect to any resources using information from this repository - it won't work."
-
+    "securityNoticeText": "This repository is public for demonstration and inspiration purposes. It was created as an after-hours side-project to showcase infrastructure, tooling and CI/CD patterns for a personal portfolio. No real credentials, private keys, hostnames, ports or IP addresses are included. All credentials and secrets must be provided via GitHub Actions Secrets or environment variables — without them the resources will not be reachable or operational. DO NOT attempt to connect to any resources using information from this repository - it won't work.",
+    "gitopsHeader": "GitOps demo",
+    "gitopsDesc": "GitOps is a modern approach to managing infrastructure and application deployments using Git as the single source of truth. All configuration and operational changes are made through pull requests and version control, enabling automated, auditable, and consistent delivery pipelines. This methodology combines the best practices of DevOps and Infrastructure as Code, making deployments safer, faster, and more transparent.",
+    "gitopsDemo": "In my demo project, you can see GitOps in action with Kubernetes resources managed directly from a Git repository.",
+    "gitopsRepo": "GitOps Demo – Kubernetes Playground"
   },
   "pl": {
     "certificationsTitle": "Moje certyfikaty",
@@ -37,7 +39,7 @@
     "certifications": "Certyfikaty",
     "title": "Witaj na mojej stronie!👋",
     "description": "Tutaj znajdziesz informacje o mnie, moim doświadczeniu i umiejętnościach. 🚀",
-    "aboutText": "Doświadczony inżynier DevOps z wieloletnią praktyką w automatyzacji procesów CI/CD, wdrażaniu aplikacji oraz utrzymaniu środowisk produkcyjnych. Posiadam pełne zrozumienie cyklu życia oprogramowania (SDLC), zdobyte podczas pracy w projektach stosujących metodyki Agile/Scrum. Mam praktyczne doświadczenie w pracy z narzędziami CI/CD, m.in. Jenkins, Azure DevOps i Ansible oraz środowisku chmurowym Azure i Openshift czy Google Cloud Platform, co pozwala mi skutecznie automatyzować procesy wdrożeń, zwiększać efektywność zespołów deweloperskich i zapewniać stabilność systemów. Szybko przyswajam nowe technologie i narzędzia, co pozwala mi efektywnie dostosowywać się do zmieniających się wymagań projektów.",
+    "aboutText": "Doświadczony Inżynier DevOps z ponad 9-letnim doświadczeniem w branży IT, w tym około 4 lata w rolach DevOps i Site Reliability. Praktyczne doświadczenie w budowie i utrzymaniu środowisk cloud-native (Azure, GCP, Kubernetes, OpenShift) z naciskiem na automatyzację (Terraform, Helm, GitOps z ArgoCD) oraz procesy CI/CD (GitHub Actions, Azure DevOps, Jenkins). Udokumentowane sukcesy we wdrażaniu i utrzymaniu aplikacji kontenerowych, optymalizacji niezawodności i przyspieszaniu dostarczania. Biegłość w monitoringu i observability (Grafana, ELK) oraz rozwiązywaniu problemów w złożonych systemach rozproszonych. Silne nastawienie na rozwiązywanie problemów, łączące praktyki inżynierii platformowej z wiedzą na poziomie aplikacji.",
     "certE12": "E.12 Montaż i eksploatacja komputerów osobistych oraz urządzeń peryferyjnych",
     "certE13": "E.13 Projektowanie lokalnych sieci komputerowych i administrowanie sieciami",
     "certE14": "E.14 Tworzenie aplikacji internetowych i baz danych oraz administrowanie bazami",
@@ -52,10 +54,14 @@
     "sectionMonitoring": "Monitoring i obserwacja",
     "sectionVC": "Kontrola wersji i współpraca zespołowa",
     "sectionOther": "Inne narzędzia",
-    "infrastructureHeader": "Infrastruktura",
-    "infrastructureDesc": "W tej sekcji znajdziesz szczegółowy opis infrastruktury użytej do stworzenia tej strony, wraz z narzędziami i technologiami, które zostały zastosowane podczas jej budowy.",
-    "infrastructureRepo": "Możesz także sprawdzić kod i narzędzia jakimi posłużyłem się do stworzenia tego projektu:",
+    "infrastructureHeader": "DevOps demo",
+    "infrastructureDesc": "To demo-projekt DevOps prezentujący kompletną infrastrukturę dla mojej strony portfolio. Pokazuje nowoczesną automatyzację CI/CD, konteneryzację, integrację z chmurą oraz monitoring z użyciem rzeczywistych narzędzi i technologii.",
+    "infrastructureRepo": "Sprawdź kod użyty w tym demo-projekcie:",
     "securityNoticeTitle": "Uwaga bezpieczeństwa:",
-    "securityNoticeText": "To repozytorium jest publiczne i służy celom demonstracyjnym oraz inspiracyjnym. Projekt powstał jako side-project po godzinach, aby zaprezentować infrastrukturę, narzędzia i wzorce CI/CD w ramach portfolio. Nie zawiera prawdziwych danych uwierzytelniających, kluczy prywatnych, nazw hostów, numerów portów ani prawdziwych adresów IP. Wszystkie dane dostępu muszą być dostarczone przez GitHub Actions Secrets lub zmienne środowiskowe — bez nich zasoby nie będą osiągalne ani funkcjonalne. NIE próbuj łączyć się z zasobami używając informacji z tego repozytorium. Rzeczywiste środowisko jest zabezpieczone i bez właściwej konfiguracji środowiskowej połączenia nie zadziałają."
+    "securityNoticeText": "To repozytorium jest publiczne i służy celom demonstracyjnym oraz inspiracyjnym. Projekt powstał jako side-project po godzinach, aby zaprezentować infrastrukturę, narzędzia i wzorce CI/CD w ramach portfolio. Nie zawiera prawdziwych danych uwierzytelniających, kluczy prywatnych, nazw hostów, numerów portów ani prawdziwych adresów IP. Wszystkie dane dostępu muszą być dostarczone przez GitHub Actions Secrets lub zmienne środowiskowe — bez nich zasoby nie będą osiągalne ani funkcjonalne. NIE próbuj łączyć się z zasobami używając informacji z tego repozytorium. Rzeczywiste środowisko jest zabezpieczone i bez właściwej konfiguracji środowiskowej połączenia nie zadziałają.",
+    "gitopsHeader": "GitOps demo",
+    "gitopsDesc": "GitOps to nowoczesne podejście do zarządzania infrastrukturą i wdrożeniami aplikacji, w którym Git jest jedynym źródłem prawdy. Wszystkie zmiany konfiguracyjne i operacyjne są wprowadzane przez pull requesty i kontrolę wersji, co umożliwia automatyczne, audytowalne i spójne pipeline'y wdrożeniowe. Metodologia ta łączy najlepsze praktyki DevOps i Infrastructure as Code, czyniąc wdrożenia bezpieczniejszymi, szybszymi i bardziej przejrzystymi.",
+    "gitopsDemo": "W moim demo-projekcie możesz zobaczyć GitOps w praktyce – zasoby Kubernetes są zarządzane bezpośrednio z repozytorium Git.",
+    "gitopsRepo": "Demo GitOps – Kubernetes Playground"
   }
 }
