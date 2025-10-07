@@ -5,6 +5,7 @@ const os = require('os');
 const morgan = require('morgan');
 const helmet = require('helmet');
 const cors = require('cors');
+const client = require('prom-client'); // Prometheus
 
 const app = express();
 const port = 3000;
@@ -33,6 +34,15 @@ const logDirectory = path.join(__dirname, 'logs');
 fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory);
 const accessLogStream = fs.createWriteStream(path.join(logDirectory, 'access.log'), { flags: 'a' });
 app.use(morgan('combined', { stream: accessLogStream }));
+
+// PROMETHEUS METRICS
+const collectDefaultMetrics = client.collectDefaultMetrics;
+collectDefaultMetrics();
+
+app.get('/metrics', async (req, res) => {
+  res.set('Content-Type', client.register.contentType);
+  res.end(await client.register.metrics());
+});
 
 // HEALTH CHECK
 app.get('/api/health', (req, res) => {

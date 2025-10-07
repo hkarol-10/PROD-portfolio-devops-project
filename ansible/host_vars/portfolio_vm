@@ -18,3 +18,6 @@ use_custom_docker_registry:          True
 github_user:                         "hkarol-10"
 github_token:                        "{{ lookup('env','GHCR_TOKEN') }}"
 portfolio_application_image:         "ghcr.io/{{ github_user }}/portfolio-app:latest"
+
+# prometheus config
+prometheus_node_exporter_enabled:    True

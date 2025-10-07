@@ -25,7 +25,7 @@ services:
       - "{{ nginx_conf }}:/etc/nginx/conf.d:ro"
       - "{{ nginx_logs_dir }}:/var/log/nginx"
       - "{{ application_logs_dir }}:/app/logs"
-{% if nginx_basic_auth %}
+{% if nginx_basic_auth or prometheus_node_exporter_enabled %}
       - "{{ nginx_htpasswd }}:/etc/nginx/.htpasswd:ro"
 {% endif %}
 {% if nginx_https_enabled %}

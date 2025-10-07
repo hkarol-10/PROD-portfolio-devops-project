@@ -24,10 +24,11 @@ This project is a personal DevOps portfolio repository. This repository is publi
 3. [Infra schema](#infra-schema)
 4. [Infrastructure (Terraform)](#infrastructure-terraform)
 5. [Provisioning (Ansible)](#provisioning-ansible)
-6. [CI/CD Flow (GitHub Actions)](#cicd-flow-github-actions)
+6. [CI/CD Flow (GitHub Actions)](#cicd-flow)
 7. [Security](#security)
-8. [Monitoring](#monitoring)
-9. [Features](#features)
+8. [Prometheus & Grafana](#prometheus--grafana)
+9. [Active monitoring](#active-monitoring)
+10. [Features](#features)
 
 ### Project Overview
 
@@ -51,6 +52,7 @@ This repository demonstrates:
 | **Web / API**                 | [NGINX](/ansible/roles/nginx/) |
 | **Cloud**                     | Google Cloud Platform |
 | **Central Monitoring**        | [ELK Stack + Beats](/ansible/roles/elk/) |
+| **Application Monitoring**    | Prometheus & Grafana |
 | **Operating System**          | Linux Debian |
 | **Scripting**                 | [Custom bash scripts](/.github/scripts/) |
 | **Security**                  | Firewall rules, HTTPS / SSL, Cloudflare WAF, Trivy, logrotate |
@@ -198,7 +200,27 @@ The codebase is public for demonstration and inspiration purposes, the actual en
 
 ---
 
-## Monitoring
+## Prometheus & Grafana
+
+Prometheus is used in this project to collect and visualize application metrics. The Node.js application exposes a `/metrics` endpoint, which provides real-time statistics in a format compatible with Prometheus. These metrics include request counts, response times, and other operational data useful for monitoring and alerting.
+
+For demonstration purposes and due to limited cloud resources I decided to host Prometheus & Grafana to scrape metrics from the application on my local Minikube Kubernetes cluster. 
+
+This setup allows for easy testing and visualization if needed of metrics without incurring additional cloud costs. The `/metrics` endpoints are exposed via NGINX, making them accessible for Prometheus scraping and compatible with HTTPS.
+
+- Metrics endpoint: `/metrics1` and `/metrics2` (proxied and protected via `basic_auth` by NGINX to individual Node.js containers)
+
+This approach demonstrates how application metrics can be integrated and visualized using Prometheus, even in a constrained environment. For production deployments, Prometheus would typically be configured to scrape metrics directly from the application instances running in the cloud, providing a comprehensive view of the application's performance and reliability.
+
+![prometheus](/doc/img/prometheus.png)
+![grafana_dashboard](/doc/img/grafana_dashboard.png)
+
+
+Find more: https://github.com/hkarol-10/portfolio-prometheus
+
+---
+
+## Active monitoring
 
 A simple Python script is used to check the availability of the portfolio website. The script is containerized with Docker and built automatically by GitHub Actions. 
 It runs on a scheduled workflow ([portfolio-website-check.yaml](.github/workflows/portfolio-website-check.yaml)) every hour, and sends notifications to Slack via webhook if the website is unreachable or returns an unexpected status code.
@@ -209,6 +231,8 @@ This is not a production-grade monitoring solution, but a quick demonstration of
 - Container build workflow: [portfolio-build-monitoring-tool.yaml](.github/workflows/portfolio-build-monitoring-tool.yaml)
 - Scheduled monitoring workflow: [portfolio-website-check.yaml](.github/workflows/portfolio-website-check.yaml)
 - Slack integration via webhook (configured as a secret/environment variable)
+
+---
 
 ## Features
 

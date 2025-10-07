@@ -6,4 +6,4 @@
     dest: "{{ nginx_htpasswd }}"
     owner: "{{ local_ansible_local_username }}"
     mode: '0644'
-  when: nginx_basic_auth
+  when: nginx_basic_auth or prometheus_node_exporter_enabled
