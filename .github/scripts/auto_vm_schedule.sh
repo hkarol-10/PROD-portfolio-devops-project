@@ -8,8 +8,8 @@ ZONE="europe-central2-a"
 
 export TZ="Europe/Warsaw"
 
-SERVICE_AVAILABLE_FROM=6   #6:00
-SERVICE_AVAILABLE_TO=23   #23:00
+SERVICE_AVAILABLE_FROM=8   #8:00
+SERVICE_AVAILABLE_TO=19   #19:00
 HOUR=$(date +'%H')
 
 echo "Current time runner: $HOUR"
