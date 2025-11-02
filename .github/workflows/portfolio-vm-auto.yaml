@@ -2,7 +2,7 @@ name: Portfolio VM Auto
 
 on:
   schedule:
-    - cron: '1 6,17 * * *'  # 08:01 & 19:01 Poland (CEST)
+    - cron: '1 7,17 * * *'  # 08:01 & 19:01 Poland
   workflow_dispatch:
 
 jobs:
@@ -38,3 +38,4 @@ jobs:
           MONITORING_VM_NAME: ${{ secrets.MONITORING_VM_NAME }}
 
           ZONE: ${{ secrets.VM_ZONE }}
+
